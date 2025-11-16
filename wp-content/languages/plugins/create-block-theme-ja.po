@@ -1,0 +1,149 @@
+# Translation of Plugins - Create Block Theme - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Create Block Theme - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-05-18 12:57:09+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - Create Block Theme - Stable (latest release)\n"
+
+#. Translators: Pattern name.
+#: includes/create-theme/theme-patterns.php:178
+msgid "A pattern with this name already exists: \"%s\"."
+msgstr "この名前のパターンはすでに存在します: \"%s\"。"
+
+#: includes/class-create-block-theme-api.php:454
+msgid "Theme Reset."
+msgstr "テーマリセット。"
+
+#: includes/class-create-block-theme-api.php:427
+msgid "Font Families retrieved."
+msgstr "フォントファミリーが取得されました。"
+
+#: includes/create-theme/theme-utils.php:152
+msgid "Invalid screenshot file"
+msgstr "無効なスクリーンショットファイル"
+
+#: includes/create-theme/theme-utils.php:131
+msgid "Screenshot not found"
+msgstr "スクリーンショットが見つかりません"
+
+#: includes/class-create-block-theme-api.php:295
+msgid "Unable to create a zip file. ZipArchive not available."
+msgstr "zip ファイルを作成できません。ZipArchive は使用できません。"
+
+#: includes/class-create-block-theme-api.php:261
+msgid "Theme Variation Created."
+msgstr "テーマバリエーションが作成されました。"
+
+#: includes/class-create-block-theme-api.php:236
+msgid "Child Theme Created."
+msgstr "子テーマが作成されました。"
+
+#: includes/class-create-block-theme-api.php:166
+msgid "Theme data retrieved."
+msgstr "テーマデータを取得しました。"
+
+#: includes/create-theme/theme-json.php:20
+msgid "Variation already exists."
+msgstr "バリエーションはすでに存在します。"
+
+#: includes/create-theme/theme-tags.php:67
+msgid "Custom Tags"
+msgstr "カスタムタグ"
+
+#: includes/create-theme/theme-tags.php:47
+msgid "read more"
+msgstr "続きを表示"
+
+#: includes/class-create-block-theme-api.php:186
+msgid "Readme file data retrieved."
+msgstr "Readme ファイルのデータを取得しました。"
+
+#: includes/class-create-block-theme-api.php:410
+msgid "Theme Saved."
+msgstr "テーマが保存されました。"
+
+#: includes/class-create-block-theme-api.php:358
+msgid "Theme Updated."
+msgstr "テーマが更新されました。"
+
+#: includes/class-create-block-theme-api.php:283
+msgid "Blank Theme Created."
+msgstr "空テーマが作成されました。"
+
+#: includes/class-create-block-theme-api.php:213
+msgid "Cloned Theme Created."
+msgstr "複製したテーマが作成されました。"
+
+#: includes/create-theme/theme-create.php:19
+#: includes/create-theme/theme-create.php:48
+#: includes/create-theme/theme-create.php:92
+msgid "Theme already exists."
+msgstr "テーマはすでに存在しています。"
+
+#: includes/create-theme/theme-tags.php:69
+msgid "custom, tags, custom-tags"
+msgstr "カスタム、タグ、カスタムタグ"
+
+#: includes/create-theme/theme-tags.php:72
+msgid "Add custom tags (single or hyphenated words, separated by commas)"
+msgstr "カスタムタグの追加 (シングルまたはハイフン、カンマ区切り)"
+
+#: includes/create-theme/theme-tags.php:87
+msgid "(max 3 tags)"
+msgstr "(最大3タグ)"
+
+#: includes/create-theme/theme-tags.php:47 build/plugin-sidebar.js:10
+msgid "https://make.wordpress.org/themes/handbook/review/required/theme-tags/"
+msgstr "https://make.wordpress.org/themes/handbook/review/required/theme-tags/"
+
+#. Translators: Theme Tags link.
+#: includes/create-theme/theme-tags.php:43
+msgid "Add theme tags to help categorize the theme (%s)."
+msgstr "テーマの分類に役立つテーマタグを追加します (%s)。"
+
+#: includes/create-theme/theme-tags.php:37
+msgid "Theme Tags"
+msgstr "テーマタグ"
+
+#. Plugin URI of the plugin
+#: create-block-theme.php
+msgid "https://wordpress.org/plugins/create-block-theme"
+msgstr "https://wordpress.org/plugins/create-block-theme"
+
+#: includes/class-create-block-theme-admin-landing.php:22
+#: build/plugin-sidebar.js:11
+msgctxt "UI String"
+msgid "Create Block Theme"
+msgstr "ブロックテーマを作成"
+
+#: assets/boilerplate/theme.json
+msgctxt "Font family name"
+msgid "System Font"
+msgstr "システムフォント"
+
+#. Author URI of the plugin
+#: create-block-theme.php build/plugin-sidebar.js:1 build/plugin-sidebar.js:10
+msgid "https://wordpress.org/"
+msgstr "https://ja.wordpress.org/"
+
+#. Author of the plugin
+#: create-block-theme.php
+msgid "WordPress.org"
+msgstr "WordPress.org"
+
+#. Description of the plugin
+#: create-block-theme.php
+msgid "Generates a block theme"
+msgstr "ブロックテーマを生成"
+
+#. Plugin Name of the plugin
+#: create-block-theme.php build/admin-landing-page.js:1
+#: build/plugin-sidebar.js:11
+msgid "Create Block Theme"
+msgstr "Create Block Theme"

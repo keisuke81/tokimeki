@@ -1,0 +1,186 @@
+/* ===== HERO ===== */
+.sec-hero {
+  position: relative;
+  padding-block: 0;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-bg);
+}
+
+.sec-hero .wp-block-cover {
+  min-height: 80vh;
+  width: 100%;
+}
+
+.sec-hero .hero-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 0;
+  padding: 0 var(--gutter);
+}
+
+.sec-hero .wp-block-cover__inner-container {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ===== MISSION ===== */
+.sec-mission {
+  text-align: center;
+  padding-block: var(--space-9);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.sec-mission .section-label {
+  margin-bottom: var(--space-6);
+  opacity: 0.6;
+}
+
+.sec-mission .mission-text {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding: 0 var(--gutter);
+}
+
+/* ===== TOP: Projects セクション ===== */
+.tpl-front .sec-top-projects {
+  background: transparent;
+  padding-block: var(--space-9);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.tpl-front .sec-top-projects .header {
+  margin-bottom: var(--space-8);
+  align-items: center;
+}
+
+.tpl-front .sec-top-projects .header .h2 {
+  color: var(--c-fg);
+  margin: 0;
+}
+
+.tpl-front .sec-top-projects .header .all-link {
+  color: var(--c-fg);
+}
+
+.tpl-front .sec-top-projects .wp-block-query {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+@media (max-width: 1024px) {
+  .tpl-front .sec-top-projects .wp-block-query {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .tpl-front .sec-top-projects {
+    padding-block: var(--space-7);
+  }
+
+  .tpl-front .sec-top-projects .wp-block-query {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  .tpl-front .sec-top-projects .header {
+    margin-bottom: var(--space-6);
+  }
+}
+
+/* ===== NEWS SUMMARY ===== */
+.sec-top-news {
+  padding-block: var(--space-9);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.sec-top-news .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: var(--space-8);
+}
+
+.sec-top-news .header .h2 {
+  margin: 0;
+  color: var(--c-fg);
+}
+
+.sec-top-news .header .all-link {
+  color: var(--c-fg);
+}
+
+.sec-top-news .wp-block-query {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .sec-top-news {
+    padding-block: var(--space-7);
+  }
+
+  .sec-top-news .header {
+    margin-bottom: var(--space-6);
+  }
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  border-top: 1px solid var(--c-border);
+  padding-block: var(--space-8);
+  color: var(--c-muted);
+  font-size: clamp(14px, 1.5vw, 16px);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.site-footer .foot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .site-footer {
+    padding-block: var(--space-6);
+  }
+
+  .site-footer .foot-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* ===== グローバルスタイル調整 ===== */
+.tpl-front {
+  overflow-x: hidden;
+}
+
+.tpl-front .wp-block-group {
+  width: 100%;
+}
+
+.tpl-front .alignwide {
+  max-width: 100%;
+  padding-inline: 0;
+}

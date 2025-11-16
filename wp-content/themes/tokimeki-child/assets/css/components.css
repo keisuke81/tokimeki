@@ -1,0 +1,234 @@
+/* ===== Header（Sticky + 縮小） ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--c-border);
+  transition: padding 0.3s ease, background 0.3s ease;
+  padding-block: 24px;
+}
+
+.site-header.is-compact {
+  padding-block: 16px;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.site-brand {
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  font-size: clamp(14px, 1.5vw, 16px);
+  text-transform: uppercase;
+}
+
+.site-nav a {
+  padding: 8px 16px;
+  display: inline-block;
+  font-size: clamp(14px, 1.5vw, 16px);
+  letter-spacing: 0.05em;
+  transition: opacity 0.2s ease;
+}
+
+.site-nav a:hover {
+  opacity: 0.6;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: 0;
+  border: 1px solid var(--c-fg);
+  background: transparent;
+  color: var(--c-fg);
+  transition: all 0.3s ease;
+  font-size: clamp(14px, 1.5vw, 16px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background: var(--c-fg);
+  color: var(--c-bg);
+}
+
+.btn-primary {
+  background: var(--c-fg);
+  color: var(--c-bg);
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--c-fg);
+}
+
+.btn-text {
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.all-link {
+  font-size: clamp(14px, 1.5vw, 16px);
+  letter-spacing: 0.05em;
+}
+
+.all-link a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.all-link a:hover {
+  opacity: 0.6;
+}
+
+/* ===== Cards ===== */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  opacity: 0.9;
+}
+
+.project-card .thumb {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-radius: 0;
+  border: none;
+  background: var(--c-gray);
+}
+
+.project-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.project-card:hover img {
+  transform: scale(1.05);
+}
+
+.project-card .title {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.project-card .subtitle {
+  font-size: clamp(14px, 1.5vw, 16px);
+  letter-spacing: 0.05em;
+  text-transform: none;
+  opacity: 0.7;
+  line-height: 1.6;
+  margin-top: var(--space-2);
+}
+
+.project-card .roles {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap
+}
+
+.role-chip {
+  font-size: 12px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-pill);
+  padding: 2px 10px
+}
+
+.news-item {
+  border-top: 1px solid var(--c-border);
+  padding-block: 24px;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 32px;
+  transition: opacity 0.2s ease;
+}
+
+.news-item:hover {
+  opacity: 0.7;
+}
+
+.news-item:last-child {
+  border-bottom: 1px solid var(--c-border);
+}
+
+.news-meta {
+  font-size: clamp(12px, 1.3vw, 14px);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.news-title {
+  font-size: clamp(16px, 1.8vw, 20px);
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width:640px) {
+  .news-item {
+    grid-template-columns: 1fr;
+    gap: 8px
+  }
+}
+/* .news-thumb に画像が無い場合は1カラムに切替 */
+.news-item:not(:has(.news-thumb img)) {
+  grid-template-columns: 1fr;
+}
+
+.news-item:not(:has(.news-thumb img)) .news-thumb {
+  display: none;
+}
+
+/* ===== Project band（一覧ページで使っている帯スタイルを流用可） ===== */
+.project-band {
+  position: relative;
+  padding: 32px 40px;
+  margin-bottom: 32px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--c-border);
+  background: #fff;
+  overflow: hidden;
+}
+
+.project-band .wp-block-columns {
+  align-items: center;
+  gap: 24px
+}
+/* ===== topページ ===== */
+/* TOPの Projects に入ったカードだけ角丸＆白カードに */
+.tpl-front .sec-top-projects .project-card {
+  border-radius: var(--r-marubi);
+  background: #fff;
+  border: 1px solid var(--c-border);
+  /* 黒の細線でラグジュアリー感 */
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
+  padding: var(--space-5);
+}
+
+/* カード内のサムネも角丸に */
+.tpl-front .sec-top-projects .project-card .thumb {
+  border-radius: var(--r-marubi-inner);
+  border: 1px solid var(--c-border);
+  overflow: hidden;
+}
