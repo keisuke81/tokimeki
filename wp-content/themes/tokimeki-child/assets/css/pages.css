@@ -77,13 +77,23 @@
 
 .tpl-front .sec-top-projects .wp-block-query {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--space-6);
 }
 
-@media (max-width: 1024px) {
-  .tpl-front .sec-top-projects .wp-block-query {
-    grid-template-columns: repeat(2, 1fr);
+/* PC表示時：プロジェクトカード内の画像サイズを小さく、タイトルを目立たせる */
+@media (min-width: 641px) {
+  .tpl-front .sec-top-projects .project-card .thumb {
+    max-width: 60%;
+    margin: 0 auto;
+  }
+
+  .tpl-front .sec-top-projects .project-card .title {
+    font-size: clamp(24px, 2.5vw, 32px);
+    font-weight: 500;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+    letter-spacing: 0.03em;
   }
 }
 
@@ -93,7 +103,6 @@
   }
 
   .tpl-front .sec-top-projects .wp-block-query {
-    grid-template-columns: 1fr;
     gap: var(--space-5);
   }
 
