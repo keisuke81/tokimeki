@@ -7,11 +7,61 @@
   align-items: center;
   justify-content: center;
   background: var(--c-bg);
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
+/* WordPressのconstrainedレイアウトの影響を無効化 */
+.sec-hero.is-layout-constrained,
+.sec-hero.wp-block-group.is-layout-constrained {
+  max-width: none !important;
 }
 
 .sec-hero .wp-block-cover {
   min-height: 80vh;
+  width: 100% !important;
+  max-width: none !important;
+  position: relative;
+  margin: 0 !important;
+}
+
+/* ヒーローアニメーション */
+.hero-logo-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-animation-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 背景要素をロゴの下に配置 */
+.sec-hero .wp-block-cover__background {
+  position: relative;
+  z-index: 0;
+}
+
+.sec-hero .wp-block-cover__inner-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  text-align: center;
 }
 
 .sec-hero .hero-title {
@@ -21,13 +71,6 @@
   letter-spacing: -0.02em;
   text-align: center;
   margin: 0;
-  padding: 0 var(--gutter);
-}
-
-.sec-hero .wp-block-cover__inner-container {
-  width: 100%;
-  max-width: var(--max-w);
-  margin: 0 auto;
   padding: 0 var(--gutter);
 }
 
@@ -192,4 +235,292 @@
 .tpl-front .alignwide {
   max-width: 100%;
   padding-inline: 0;
+}
+
+/* ===== ARCHIVE: Projects ページ ===== */
+.tpl-archive-project {
+  overflow-x: hidden;
+  background: #000000;
+  min-height: 100vh;
+}
+
+.tpl-archive-project .sec-archive-projects {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.tpl-archive-project .page-title {
+  margin-bottom: var(--space-8);
+  color: #ffffff;
+}
+
+.tpl-archive-project .wp-block-query {
+  max-width: 100%;
+}
+
+.tpl-archive-project .wp-block-post-template {
+  margin: 0 !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}
+
+.tpl-archive-project .wp-block-post-template > * {
+  margin: 0 !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}
+
+/* プロジェクトアイテム */
+.tpl-archive-project .project-item,
+.tpl-archive-project .wp-block-group.project-item {
+  display: flex;
+  gap: var(--space-5);
+  align-items: flex-start;
+  padding: var(--space-6);
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+  background: #ffffff;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tpl-archive-project .project-item:first-child {
+  border-top-left-radius: var(--r-marubi);
+  border-top-right-radius: var(--r-marubi);
+}
+
+.tpl-archive-project .project-item:last-child {
+  border-bottom-left-radius: var(--r-marubi);
+  border-bottom-right-radius: var(--r-marubi);
+  border-bottom: none;
+}
+
+.tpl-archive-project .project-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* プロジェクトサムネイル */
+.tpl-archive-project .project-thumb {
+  flex-shrink: 0;
+  width: 150px;
+  height: 150px;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: var(--r-marubi-inner);
+  border: 1px solid var(--c-border);
+  background: var(--c-gray);
+}
+
+.tpl-archive-project .project-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.tpl-archive-project .project-item:hover .project-thumb img {
+  transform: scale(1.05);
+}
+
+/* プロジェクトコンテンツ */
+.tpl-archive-project .project-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* プロジェクトタイトル */
+.tpl-archive-project .project-title {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.tpl-archive-project .project-title a {
+  color: var(--c-fg);
+  text-decoration: none;
+}
+
+.tpl-archive-project .project-title a:hover {
+  opacity: 0.7;
+}
+
+/* プロジェクト説明文 */
+.tpl-archive-project .project-excerpt,
+.tpl-archive-project .wp-block-post-excerpt.project-excerpt,
+.tpl-archive-project .project-excerpt p,
+.tpl-archive-project .wp-block-post-excerpt.project-excerpt p {
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: var(--c-muted);
+  margin: 0 0 var(--space-3) 0 !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* プロジェクトアクション */
+.tpl-archive-project .project-actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin-top: var(--space-2);
+}
+
+.tpl-archive-project .project-instagram-link {
+  margin: 0;
+}
+
+.tpl-archive-project .project-instagram-link a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: #E4405F;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 50%;
+  font-size: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tpl-archive-project .project-instagram-link a:hover {
+  opacity: 0.9;
+  transform: translateY(-1px) scale(1.05);
+}
+
+.tpl-archive-project .project-instagram-link a svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.tpl-archive-project .project-instagram-link:empty {
+  display: none;
+}
+
+/* 追加説明文のトグル */
+.tpl-archive-project .project-toggle-desc {
+  margin: 0;
+}
+
+.tpl-archive-project .project-toggle-desc button {
+  background: transparent;
+  border: 1px solid var(--c-border);
+  color: var(--c-fg);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  font-size: clamp(12px, 1.3vw, 14px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tpl-archive-project .project-toggle-desc button:hover {
+  background: var(--c-gray);
+  border-color: var(--c-fg);
+}
+
+.tpl-archive-project .project-toggle-desc:empty {
+  display: none;
+}
+
+/* 追加説明文 */
+.tpl-archive-project .project-additional-desc {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--c-border);
+}
+
+.tpl-archive-project .project-additional-text {
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: var(--c-muted);
+  margin: 0;
+}
+
+/* ページネーション */
+.tpl-archive-project .wp-block-query-pagination {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tpl-archive-project .wp-block-query-pagination a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.tpl-archive-project .wp-block-query-pagination a:hover {
+  opacity: 0.7;
+}
+
+.tpl-archive-project .wp-block-query-pagination .wp-block-query-pagination-numbers {
+  color: #ffffff;
+}
+
+/* PC表示時：カードを大きく、存在感を出す */
+@media (min-width: 641px) {
+  .tpl-archive-project .project-item {
+    padding: var(--space-8);
+    gap: var(--space-6);
+  }
+
+  .tpl-archive-project .project-thumb {
+    width: 400px;
+    height: 400px;
+  }
+
+  .tpl-archive-project .project-title {
+    font-size: clamp(24px, 2.5vw, 32px);
+    font-weight: 500;
+  }
+}
+
+/* より大きな画面ではさらに大きく */
+@media (min-width: 1024px) {
+  .tpl-archive-project .project-thumb {
+    width: 480px;
+    height: 480px;
+  }
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .tpl-archive-project .project-thumb {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tpl-archive-project .sec-archive-projects {
+    padding-block: var(--space-7);
+  }
+
+  .tpl-archive-project .page-title {
+    margin-bottom: var(--space-6);
+  }
+
+  .tpl-archive-project .project-item {
+    padding: var(--space-5);
+    gap: var(--space-4);
+  }
 }

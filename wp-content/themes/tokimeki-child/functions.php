@@ -43,6 +43,16 @@ add_action('wp_enqueue_scripts', function () {
     file_exists($js_path) ? filemtime($js_path) : null,
     true
   );
+
+  // 5) ヒーローアニメーションJS
+  $hero_js_path = $theme_dir . '/assets/js/hero-animation.js';
+  wp_enqueue_script(
+    'tokimeki-hero-animation',
+    $theme_uri . '/assets/js/hero-animation.js',
+    [],
+    file_exists($hero_js_path) ? filemtime($hero_js_path) : null,
+    true
+  );
 }, 999); // ← 重要：とても遅い優先度で “最後に” 差し込む
 
 /**
