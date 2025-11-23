@@ -12,21 +12,22 @@
     // アニメーション用のCanvasコンテナを作成
     const canvasContainer = document.createElement('div');
     canvasContainer.className = 'hero-logo-animation';
-    canvasContainer.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;';
+    // CSSでposition: fixedが設定されているので、インラインスタイルは最小限に
+    canvasContainer.style.cssText = 'pointer-events:none;';
     
     const canvas = document.createElement('canvas');
     canvas.className = 'hero-animation-canvas';
     canvasContainer.appendChild(canvas);
     
-    // heroSectionをrelativeにして、canvasを配置（paddingの影響を受けないように）
-    heroSection.style.position = 'relative';
-    heroSection.insertBefore(canvasContainer, heroSection.firstChild);
+    // bodyに直接追加（画面全体に表示するため）
+    document.body.appendChild(canvasContainer);
 
     const ctx = canvas.getContext('2d');
     let animationId = null;
     let circles = [];
     let phase = 'multiply'; // multiply -> reveal -> fadeout
     let startTime = null;
+    let fadeoutStartTime = null;
     
     // 「O」の縦横比（固定値）
     // 横半径65:縦半径74
@@ -69,99 +70,170 @@
 
     // Canvasサイズを設定
     function resizeCanvas() {
-      // Canvasコンテナの実際のサイズを取得
-      const containerRect = canvasContainer.getBoundingClientRect();
-      // Canvasの内部サイズを表示サイズに合わせる（重要：これがないと描画が歪む）
-      canvas.width = containerRect.width;
-      canvas.height = containerRect.height;
+      // 画面全体のサイズを使用（ロゴ以外の「O」が画面全体に広がるように）
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
       
       // デバッグ情報
       console.log('=== Canvas サイズ ===');
       console.log('Canvas width:', canvas.width);
       console.log('Canvas height:', canvas.height);
-      console.log('Canvas container width:', containerRect.width);
-      console.log('Canvas container height:', containerRect.height);
       console.log('Window innerWidth:', window.innerWidth);
+      console.log('Window innerHeight:', window.innerHeight);
       console.log('heroSection width:', heroSection.getBoundingClientRect().width);
+      console.log('heroSection height:', heroSection.getBoundingClientRect().height);
     }
 
-    // ランダムな「O」を生成
-    function createRandomCircle() {
-      const padding = 50;
+    // スケール計算を共有する関数
+    function getScale() {
+      const logoCenterWidth = 390;
+      const logoCenterHeight = 296;
+      const logoFullWidth = logoCenterWidth + O_HORIZONTAL_RADIUS * 2; // 520単位
+      const logoFullHeight = logoCenterHeight + O_VERTICAL_RADIUS * 2; // 444単位
+      
+      const padding = 60;
+      const availableWidth = canvas.width - padding * 2;
+      const availableHeight = canvas.height - padding * 2;
+      
+      const scaleX = availableWidth / logoFullWidth;
+      const scaleY = availableHeight / logoFullHeight;
+      const scale = Math.min(scaleX, scaleY) * 1.105 * 0.75; // 25%小さく（0.75倍）
+      
+      // heroSectionの中央を計算（ロゴはheroSectionの中央に配置）
+      const heroRect = heroSection.getBoundingClientRect();
+      const centerX = heroRect.left + heroRect.width / 2;
+      const centerY = heroRect.top + heroRect.height / 2;
+      
       return {
-        x: Math.random() * (canvas.width - padding * 2) + padding,
-        y: Math.random() * (canvas.height - padding * 2) + padding,
-        size: 8 + Math.random() * 12,
-        opacity: 0,
-        targetOpacity: 0.3 + Math.random() * 0.4,
-        speed: 0.01 + Math.random() * 0.02,
-        isLogo: false,
-        keep: false
+        scale: scale,
+        verticalRadius: O_VERTICAL_RADIUS * scale,
+        horizontalRadius: O_HORIZONTAL_RADIUS * scale,
+        centerX: centerX,
+        centerY: centerY
       };
+    }
+
+    // 規則性のある「O」を生成（ロゴの左右に配置、画面全体を覆う）
+    function createPatternCircles() {
+      const scaleInfo = getScale();
+      const circles = [];
+      const unitSpacing = 130; // ロゴの「O」間の間隔（130単位）
+      
+      // 各段のロゴ範囲とy座標
+      const rows = [
+        {y: 148, leftEdge: -65, rightEdge: 65},   // 1段目
+        {y: 74, leftEdge: -130, rightEdge: 130},  // 2段目
+        {y: 0, leftEdge: -195, rightEdge: 195},   // 3段目
+        {y: -74, leftEdge: -130, rightEdge: 130}, // 4段目
+        {y: -148, leftEdge: -65, rightEdge: 65},  // 5段目
+      ];
+      
+      // Canvasのサイズから、画面全体を覆うために必要な「O」の数を計算
+      // 画面全体（100vw）をカバーするために必要な数
+      const canvasWidthInUnits = canvas.width / scaleInfo.scale;
+      const rightCount = Math.ceil((canvasWidthInUnits / 2 - 195) / unitSpacing) + 10; // 余裕を持たせる
+      const leftCount = Math.ceil((canvasWidthInUnits / 2 - 195) / unitSpacing) + 10;
+      
+      // 各段でロゴの左右に規則的に配置（画面全体を覆う）
+      rows.forEach(row => {
+        // 右側に配置（ロゴの右端から130単位ずつ、画面端まで）
+        for (let i = 1; i <= rightCount; i++) {
+          const patternX = row.rightEdge + unitSpacing * i;
+          const x = scaleInfo.centerX + patternX * scaleInfo.scale;
+          const y = scaleInfo.centerY - row.y * scaleInfo.scale;
+          
+          // 画面範囲内かチェック（Canvas範囲外でも表示可能にするため、緩いチェック）
+          if (x + scaleInfo.horizontalRadius > -100 && x - scaleInfo.horizontalRadius < canvas.width + 100) {
+            // ロゴからの距離を計算（フェードアウトの順序に使用）
+            const distanceFromCenter = Math.abs(patternX);
+            
+            circles.push({
+              x: x,
+              y: y,
+              horizontalRadius: scaleInfo.horizontalRadius,
+              verticalRadius: scaleInfo.verticalRadius,
+              opacity: 0,
+              targetOpacity: 0.3 + Math.random() * 0.4,
+              speed: 0.005 + Math.random() * 0.01, // フェードイン速度を遅く
+              isLogo: false,
+              keep: false,
+              delay: Math.random() * 4, // フェードインの遅延を長く（0-4秒）
+              distanceFromCenter: distanceFromCenter // ロゴからの距離
+            });
+          }
+        }
+        
+        // 左側に配置（ロゴの左端から130単位ずつ、画面端まで）
+        for (let i = 1; i <= leftCount; i++) {
+          const patternX = row.leftEdge - unitSpacing * i;
+          const x = scaleInfo.centerX + patternX * scaleInfo.scale;
+          const y = scaleInfo.centerY - row.y * scaleInfo.scale;
+          
+          // 画面範囲内かチェック（Canvas範囲外でも表示可能にするため、緩いチェック）
+          if (x + scaleInfo.horizontalRadius > -100 && x - scaleInfo.horizontalRadius < canvas.width + 100) {
+            // ロゴからの距離を計算（フェードアウトの順序に使用）
+            const distanceFromCenter = Math.abs(patternX);
+            
+            circles.push({
+              x: x,
+              y: y,
+              horizontalRadius: scaleInfo.horizontalRadius,
+              verticalRadius: scaleInfo.verticalRadius,
+              opacity: 0,
+              targetOpacity: 0.3 + Math.random() * 0.4,
+              speed: 0.005 + Math.random() * 0.01, // フェードイン速度を遅く
+              isLogo: false,
+              keep: false,
+              delay: Math.random() * 4, // フェードインの遅延を長く（0-4秒）
+              distanceFromCenter: distanceFromCenter // ロゴからの距離
+            });
+          }
+        }
+      });
+      
+      return circles;
     }
 
     // ロゴパターンの「O」を生成
     function createLogoCircles() {
-      // ロゴの中心（3段目の中央、x: 0）がCanvasの中心に来るように配置
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      
-      // 座標系の範囲を計算
-      // ロゴの中心間距離: x: -195～195 (幅390単位), y: -148～148 (高さ296単位)
-      // ロゴ全体のサイズ（「O」の半径を含む）: 横520単位, 縦444単位
-      const logoCenterWidth = 390; // 中心間の幅（単位）
-      const logoCenterHeight = 296; // 中心間の高さ（単位）
-      const logoFullWidth = logoCenterWidth + O_HORIZONTAL_RADIUS * 2; // 520単位
-      const logoFullHeight = logoCenterHeight + O_VERTICAL_RADIUS * 2; // 444単位
-      
-      // 画面サイズに合わせてスケールを計算（余白を考慮）
-      // ロゴ全体が画面内に収まるように余白を適度に取る
-      const padding = 60; // 余白をさらに減らしてロゴを大きく
-      const availableWidth = canvas.width - padding * 2;
-      const availableHeight = canvas.height - padding * 2;
-      
-      // ロゴ全体の縦横比（520:444）を維持しながらスケール
-      const scaleX = availableWidth / logoFullWidth;
-      const scaleY = availableHeight / logoFullHeight;
-      const scale = Math.min(scaleX, scaleY) * 1.105; // 約30%大きく（0.85 * 1.3 ≈ 1.105）
-      
-      // 「O」のサイズ（縦半径74を基準）
-      const verticalRadius = O_VERTICAL_RADIUS * scale;
-      const horizontalRadius = O_HORIZONTAL_RADIUS * scale;
+      const scaleInfo = getScale();
       
       // デバッグ情報
       console.log('=== ロゴ配置情報 ===');
-      console.log('ロゴ全体サイズ: 横', logoFullWidth, '単位 / 縦', logoFullHeight, '単位');
-      console.log('ロゴ全体縦横比:', (logoFullWidth / logoFullHeight).toFixed(4), '(520/444 =', (520/444).toFixed(4), ')');
-      console.log('Canvas centerX:', centerX);
-      console.log('Canvas centerY:', centerY);
-      console.log('Scale:', scale);
-      console.log('Available width:', availableWidth);
-      console.log('Available height:', availableHeight);
-      console.log('O縦横比: 横半径', horizontalRadius, 'px / 縦半径', verticalRadius, 'px');
-      console.log('O縦横比比率:', (horizontalRadius / verticalRadius).toFixed(4), '(65/74 =', (65/74).toFixed(4), ')');
+      console.log('ロゴ全体サイズ: 横520単位 / 縦444単位');
+      console.log('ロゴ全体縦横比:', (520/444).toFixed(4));
+      console.log('Canvas centerX:', scaleInfo.centerX);
+      console.log('Canvas centerY:', scaleInfo.centerY);
+      console.log('Scale:', scaleInfo.scale);
+      console.log('O縦横比: 横半径', scaleInfo.horizontalRadius, 'px / 縦半径', scaleInfo.verticalRadius, 'px');
+      console.log('O縦横比比率:', (scaleInfo.horizontalRadius / scaleInfo.verticalRadius).toFixed(4), '(65/74 =', (65/74).toFixed(4), ')');
       
       const circles = logoPattern.map(pattern => {
-        const x = centerX + pattern.x * scale;
-        const y = centerY - pattern.y * scale;
+        const x = scaleInfo.centerX + pattern.x * scaleInfo.scale;
+        const y = scaleInfo.centerY - pattern.y * scaleInfo.scale;
         
         // 3段目の中央（id: 7, 8）の位置を確認
         if (pattern.x === 65 || pattern.x === -65) {
           console.log(`Circle id ${pattern.x === 65 ? 7 : 8}: x=${x}, y=${y}, pattern.x=${pattern.x}`);
         }
         
+        // ロゴからの距離を計算（フェードアウトの順序に使用）
+        const distanceFromCenter = Math.abs(pattern.x);
+        
         return {
           // Canvas座標系: ロゴの中心（x: 0）がCanvasの中心に来るように配置
           // yは反転（上から下が正）
           x: x,
           y: y,
-          horizontalRadius: horizontalRadius, // 横半径
-          verticalRadius: verticalRadius,     // 縦半径
+          horizontalRadius: scaleInfo.horizontalRadius, // 横半径
+          verticalRadius: scaleInfo.verticalRadius,     // 縦半径
           opacity: 0,
           targetOpacity: 1,
-          speed: 0.02,
+          speed: 0.01, // フェードイン速度を遅く
           isLogo: true,
-          keep: pattern.keep
+          keep: pattern.keep,
+          delay: Math.random() * 3, // ロゴも段階的にフェードイン（0-3秒）
+          distanceFromCenter: distanceFromCenter // ロゴからの距離（ロゴ内では0に近い）
         };
       });
       
@@ -175,57 +247,73 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // フェーズ1: 増殖（0-2秒）
-      if (phase === 'multiply' && elapsed < 2) {
-        // ランダムな「O」を追加
-        if (circles.length < 200 && Math.random() < 0.3) {
-          circles.push(createRandomCircle());
+      // フェーズ1: 増殖（0-4秒）- すべての「O」を段階的にフェードイン
+      if (phase === 'multiply' && elapsed < 4) {
+        // 最初にすべての「O」（規則性のある「O」とロゴ）を生成
+        if (circles.length === 0) {
+          const patternCircles = createPatternCircles();
+          const logoCircles = createLogoCircles();
+          circles.push(...patternCircles);
+          circles.push(...logoCircles);
         }
         
-        // 既存の「O」をフェードイン
+        // すべての「O」を段階的にフェードイン（delayに基づいて）
         circles.forEach(circle => {
-          if (!circle.isLogo) {
-            circle.opacity = Math.min(circle.opacity + circle.speed, circle.targetOpacity);
+          // delayが経過したらフェードイン開始
+          if (elapsed >= circle.delay) {
+            circle.opacity = Math.min(
+              circle.opacity + circle.speed, 
+              circle.targetOpacity
+            );
           }
         });
       }
-      // フェーズ2: ロゴ表示（2-3秒）
-      else if (phase === 'multiply' && elapsed >= 2 && elapsed < 3) {
+      // フェーズ2: すべて表示完了（4-5秒）
+      else if (phase === 'multiply' && elapsed >= 4 && elapsed < 5) {
         phase = 'reveal';
-        const logoCircles = createLogoCircles();
-        circles = circles.concat(logoCircles);
-      }
-      // フェーズ3: ロゴの「O」を強調（3-3.5秒）
-      else if (phase === 'reveal' && elapsed >= 3 && elapsed < 3.5) {
+        // すべての「O」を完全に表示
         circles.forEach(circle => {
-          if (circle.isLogo) {
-            circle.opacity = Math.min(circle.opacity + circle.speed * 2, circle.targetOpacity);
-          }
+          circle.opacity = circle.targetOpacity;
         });
       }
-      // フェーズ4: ロゴ以外をフェードアウト（3.5-5秒）
-      else if (phase === 'reveal' && elapsed >= 3.5) {
+      // フェーズ3: ロゴ以外をフェードアウト（5-7秒）- 距離に基づいて順序付け
+      else if (phase === 'reveal' && elapsed >= 5) {
         phase = 'fadeout';
-        circles.forEach(circle => {
-          if (!circle.keep) {
-            circle.targetOpacity = 0;
-          }
-        });
+        // フェードアウト開始時刻を記録
+        if (fadeoutStartTime === null) {
+          fadeoutStartTime = elapsed;
+        }
       }
-      else if (phase === 'fadeout') {
-        let allFaded = true;
+      
+      if (phase === 'fadeout') {
+        const fadeoutElapsed = elapsed - fadeoutStartTime;
+        const fadeoutDuration = 2; // フェードアウトの期間（2秒）
+        
+        // ロゴ以外の「O」の最大距離を計算
+        const nonLogoCircles = circles.filter(c => !c.keep);
+        const maxDistance = nonLogoCircles.length > 0 
+          ? Math.max(...nonLogoCircles.map(c => c.distanceFromCenter || 0))
+          : 1;
+        
         circles.forEach(circle => {
           if (!circle.keep) {
-            circle.opacity = Math.max(circle.opacity - circle.speed * 1.5, 0);
-            if (circle.opacity > 0) allFaded = false;
+            // ロゴからの距離に基づいてフェードアウトの開始タイミングを決定
+            // 距離が遠いほど早くフェードアウト開始
+            const distanceRatio = maxDistance > 0 ? (circle.distanceFromCenter || 0) / maxDistance : 0;
+            const fadeoutDelay = distanceRatio * fadeoutDuration * 0.3; // 最大でフェードアウト期間の30%まで遅延
+            
+            if (fadeoutElapsed >= fadeoutDelay) {
+              const fadeoutProgress = Math.min((fadeoutElapsed - fadeoutDelay) / (fadeoutDuration - fadeoutDelay), 1);
+              circle.opacity = Math.max(circle.targetOpacity * (1 - fadeoutProgress), 0);
+            }
           } else {
-            // ロゴの「O」は完全に表示
-            circle.opacity = Math.min(circle.opacity + circle.speed, circle.targetOpacity);
+            // ロゴの「O」は完全に表示を維持
+            circle.opacity = circle.targetOpacity;
           }
         });
         
-        // すべてフェードアウトしたら、ロゴのみを残す
-        if (allFaded && elapsed > 5) {
+        // フェードアウト完了後、ロゴのみを残す
+        if (fadeoutElapsed > fadeoutDuration) {
           circles = circles.filter(c => c.keep);
         }
       }
@@ -253,11 +341,19 @@
             );
             ctx.stroke();
           } else {
-            // ランダムな「O」は円として描画（アニメーション用）
+            // 規則性のある「O」はロゴと同じ楕円として描画
             ctx.strokeStyle = '#000';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(circle.x, circle.y, circle.size / 2, 0, Math.PI * 2);
+            ctx.ellipse(
+              circle.x, 
+              circle.y, 
+              circle.horizontalRadius, 
+              circle.verticalRadius, 
+              0, 
+              0, 
+              Math.PI * 2
+            );
             ctx.stroke();
           }
           
@@ -271,9 +367,12 @@
     // リサイズハンドラ
     function handleResize() {
       resizeCanvas();
-      // ロゴの位置とサイズを再計算
+      // ロゴと規則性のある「O」の位置とサイズを再計算
       if (phase !== 'multiply') {
         const logoCircles = createLogoCircles();
+        const patternCircles = createPatternCircles();
+        
+        // ロゴの「O」を更新
         circles.forEach((circle, index) => {
           if (circle.isLogo && logoCircles[index]) {
             circle.x = logoCircles[index].x;
@@ -282,6 +381,23 @@
             circle.verticalRadius = logoCircles[index].verticalRadius;
           }
         });
+        
+        // 規則性のある「O」を更新
+        let patternIndex = 0;
+        circles.forEach((circle) => {
+          if (!circle.isLogo && patternCircles[patternIndex]) {
+            circle.x = patternCircles[patternIndex].x;
+            circle.y = patternCircles[patternIndex].y;
+            circle.horizontalRadius = patternCircles[patternIndex].horizontalRadius;
+            circle.verticalRadius = patternCircles[patternIndex].verticalRadius;
+            patternIndex++;
+          }
+        });
+      } else {
+        // multiplyフェーズ中は、規則性のある「O」を再生成
+        const patternCircles = createPatternCircles();
+        circles = circles.filter(c => c.isLogo); // ロゴ以外を削除
+        circles.push(...patternCircles); // 新しい規則性のある「O」を追加
       }
     }
 
