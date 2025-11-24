@@ -106,7 +106,7 @@
       const heroRect = heroSection.getBoundingClientRect();
       // Canvasは画面全体なので、heroSectionの中央をCanvas座標系に変換
       const centerX = heroRect.left + heroRect.width / 2;
-      const centerY = heroRect.top + heroRect.height / 2 - 80; // 80px上に移動
+      const centerY = heroRect.top + heroRect.height / 2 - 110; // 110px上に移動（30px追加）
       
       // デバッグ情報
       console.log('=== スケール情報 ===');
