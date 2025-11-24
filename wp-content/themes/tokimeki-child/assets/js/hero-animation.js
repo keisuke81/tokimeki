@@ -19,8 +19,9 @@
     canvas.className = 'hero-animation-canvas';
     canvasContainer.appendChild(canvas);
     
-    // bodyに直接追加（画面全体に表示するため）
-    document.body.appendChild(canvasContainer);
+    // heroSectionに追加（スクロール時に一緒に動くように）
+    heroSection.style.position = 'relative';
+    heroSection.insertBefore(canvasContainer, heroSection.firstChild);
 
     const ctx = canvas.getContext('2d');
     let animationId = null;
@@ -82,6 +83,8 @@
       console.log('Window innerHeight:', window.innerHeight);
       console.log('heroSection width:', heroSection.getBoundingClientRect().width);
       console.log('heroSection height:', heroSection.getBoundingClientRect().height);
+      console.log('heroSection left:', heroSection.getBoundingClientRect().left);
+      console.log('heroSection top:', heroSection.getBoundingClientRect().top);
     }
 
     // スケール計算を共有する関数
@@ -101,8 +104,20 @@
       
       // heroSectionの中央を計算（ロゴはheroSectionの中央に配置）
       const heroRect = heroSection.getBoundingClientRect();
+      // Canvasは画面全体なので、heroSectionの中央をCanvas座標系に変換
       const centerX = heroRect.left + heroRect.width / 2;
-      const centerY = heroRect.top + heroRect.height / 2;
+      const centerY = heroRect.top + heroRect.height / 2 - 80; // 80px上に移動
+      
+      // デバッグ情報
+      console.log('=== スケール情報 ===');
+      console.log('Scale:', scale);
+      console.log('Available width:', availableWidth);
+      console.log('Available height:', availableHeight);
+      console.log('Logo full width (units):', logoFullWidth);
+      console.log('Logo full height (units):', logoFullHeight);
+      console.log('CenterX:', centerX);
+      console.log('CenterY:', centerY);
+      console.log('heroRect:', heroRect);
       
       return {
         scale: scale,
@@ -327,7 +342,7 @@
           if (circle.isLogo) {
             // ロゴの「O」は楕円として描画（横半径65:縦半径74）
             ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 5; // 2.5倍（2 * 2.5 = 5）
             ctx.beginPath();
             // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
             ctx.ellipse(
@@ -343,7 +358,7 @@
           } else {
             // 規則性のある「O」はロゴと同じ楕円として描画
             ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 5; // 2.5倍（2 * 2.5 = 5）
             ctx.beginPath();
             ctx.ellipse(
               circle.x, 

@@ -29,7 +29,7 @@
 
 /* ヒーローアニメーション */
 .hero-logo-animation {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -43,8 +43,8 @@
 
 .hero-animation-canvas {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* 背景要素をロゴの下に配置 */
@@ -96,16 +96,54 @@
 
 /* ===== TOP: Projects セクション ===== */
 .tpl-front .sec-top-projects {
-  background: transparent;
-  padding-block: var(--space-9);
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding-inline: var(--gutter);
+  position: relative;
+  background: var(--c-bg);
+  padding-top: var(--space-9);
+  padding-bottom: calc(var(--space-9) + var(--space-6) + 520px); /* 4段目分の余白を追加（gap + card高さ） */
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding-inline: 0;
+  overflow: visible;
+}
+
+/* WordPressのconstrainedレイアウトの影響を無効化 */
+.tpl-front .sec-top-projects.is-layout-constrained,
+.tpl-front .sec-top-projects.wp-block-group.is-layout-constrained {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* 背景ロゴ（Oの集合体）- 白背景の上に黒で塗りつぶし表示 */
+.tpl-front .sec-top-projects::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 444'%3E%3Cg fill='%23000000'%3E%3C!-- 1段目 (y=148) --%3E%3Cellipse cx='325' cy='370' rx='65' ry='74'/%3E%3Cellipse cx='195' cy='370' rx='65' ry='74'/%3E%3C!-- 2段目 (y=74) --%3E%3Cellipse cx='390' cy='296' rx='65' ry='74'/%3E%3Cellipse cx='260' cy='296' rx='65' ry='74'/%3E%3Cellipse cx='130' cy='296' rx='65' ry='74'/%3E%3C!-- 3段目 (y=0) --%3E%3Cellipse cx='455' cy='222' rx='65' ry='74'/%3E%3Cellipse cx='325' cy='222' rx='65' ry='74'/%3E%3Cellipse cx='195' cy='222' rx='65' ry='74'/%3E%3Cellipse cx='65' cy='222' rx='65' ry='74'/%3E%3C!-- 4段目 (y=-74) --%3E%3Cellipse cx='390' cy='148' rx='65' ry='74'/%3E%3Cellipse cx='260' cy='148' rx='65' ry='74'/%3E%3Cellipse cx='130' cy='148' rx='65' ry='74'/%3E%3C!-- 5段目 (y=-148) --%3E%3Cellipse cx='325' cy='74' rx='65' ry='74'/%3E%3Cellipse cx='195' cy='74' rx='65' ry='74'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 70% center;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
 }
 
 .tpl-front .sec-top-projects .header {
   margin-bottom: var(--space-8);
   align-items: center;
+  position: relative;
+  z-index: 2;
+  /* 白背景を追加してロゴの上に重ねる */
+  background: rgba(255, 255, 255, 0.95);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--r-marubi-inner);
+  max-width: fit-content;
+  margin-left: var(--gutter);
 }
 
 .tpl-front .sec-top-projects .header .h2 {
@@ -121,20 +159,33 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-6);
+  position: relative;
+  z-index: 2;
+  max-width: 80%;
+  margin: 0 auto;
 }
 
-/* PC表示時：プロジェクトカード内の画像サイズを小さく、タイトルを目立たせる */
+/* post-template内のproject-cardをグリッドで制御 */
+.tpl-front .sec-top-projects .wp-block-post-template {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+/* PC表示時：プロジェクトカードの高さを調整 */
 @media (min-width: 641px) {
+  .tpl-front .sec-top-projects .project-card {
+    min-height: 520px;
+  }
+
   .tpl-front .sec-top-projects .project-card .thumb {
-    max-width: 60%;
-    margin: 0 auto;
+    width: 554px;
+    height: 416px; /* 520pxの80% */
   }
 
   .tpl-front .sec-top-projects .project-card .title {
-    font-size: clamp(24px, 2.5vw, 32px);
+    font-size: clamp(20px, 2.2vw, 28px);
     font-weight: 500;
-    margin-top: var(--space-4);
-    margin-bottom: var(--space-2);
     letter-spacing: 0.03em;
   }
 }
@@ -150,6 +201,8 @@
 
   .tpl-front .sec-top-projects .header {
     margin-bottom: var(--space-6);
+    margin-left: var(--gutter);
+    padding: var(--space-3) var(--space-4);
   }
 }
 
@@ -227,6 +280,11 @@
   overflow-x: hidden;
 }
 
+/* projectsセクションの背景ロゴがはみ出すように、このセクションのみoverflowを許可 */
+.tpl-front .sec-top-projects {
+  overflow-x: visible;
+}
+
 .tpl-front .wp-block-group {
   width: 100%;
 }
@@ -239,23 +297,82 @@
 /* ===== ARCHIVE: Projects ページ ===== */
 .tpl-archive-project {
   overflow-x: hidden;
-  background: #000000;
+  background: var(--c-bg);
   min-height: 100vh;
 }
 
 .tpl-archive-project .sec-archive-projects {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding-inline: var(--gutter);
+  position: relative;
+  background: var(--c-bg);
+  padding-top: var(--space-9);
+  padding-bottom: var(--space-9);
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding-inline: 0;
+  overflow: visible;
 }
 
-.tpl-archive-project .page-title {
+/* WordPressのconstrainedレイアウトの影響を無効化 */
+.tpl-archive-project .sec-archive-projects.is-layout-constrained,
+.tpl-archive-project .sec-archive-projects.wp-block-group.is-layout-constrained {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* 背景ロゴ（Oの集合体）- 白背景の上に黒で塗りつぶし表示 */
+.tpl-archive-project .sec-archive-projects::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 444'%3E%3Cg fill='%23000000'%3E%3C!-- 1段目 (y=148) --%3E%3Cellipse cx='325' cy='370' rx='65' ry='74'/%3E%3Cellipse cx='195' cy='370' rx='65' ry='74'/%3E%3C!-- 2段目 (y=74) --%3E%3Cellipse cx='390' cy='296' rx='65' ry='74'/%3E%3Cellipse cx='260' cy='296' rx='65' ry='74'/%3E%3Cellipse cx='130' cy='296' rx='65' ry='74'/%3E%3C!-- 3段目 (y=0) --%3E%3Cellipse cx='455' cy='222' rx='65' ry='74'/%3E%3Cellipse cx='325' cy='222' rx='65' ry='74'/%3E%3Cellipse cx='195' cy='222' rx='65' ry='74'/%3E%3Cellipse cx='65' cy='222' rx='65' ry='74'/%3E%3C!-- 4段目 (y=-74) --%3E%3Cellipse cx='390' cy='148' rx='65' ry='74'/%3E%3Cellipse cx='260' cy='148' rx='65' ry='74'/%3E%3Cellipse cx='130' cy='148' rx='65' ry='74'/%3E%3C!-- 5段目 (y=-148) --%3E%3Cellipse cx='325' cy='74' rx='65' ry='74'/%3E%3Cellipse cx='195' cy='74' rx='65' ry='74'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 70% center;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.tpl-archive-project .sec-archive-projects .header {
   margin-bottom: var(--space-8);
-  color: #ffffff;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  /* 白背景を追加してロゴの上に重ねる */
+  background: rgba(255, 255, 255, 0.95);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--r-marubi-inner);
+  max-width: fit-content;
+  margin-left: var(--gutter);
+}
+
+.tpl-archive-project .sec-archive-projects .header .h2,
+.tpl-archive-project .sec-archive-projects .header .page-title {
+  color: var(--c-fg);
+  margin: 0;
 }
 
 .tpl-archive-project .wp-block-query {
-  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  position: relative;
+  z-index: 2;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+/* post-template内のproject-cardをグリッドで制御 */
+.tpl-archive-project .wp-block-post-template {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
 }
 
 .tpl-archive-project .wp-block-post-template {
@@ -521,5 +638,188 @@
   .tpl-archive-project .project-item {
     padding: var(--space-5);
     gap: var(--space-4);
+  }
+}
+
+/* ===== COMPANY ページ ===== */
+.tpl-company {
+  overflow-x: hidden;
+  background: var(--c-bg);
+  min-height: 100vh;
+}
+
+/* Mission セクション */
+.tpl-company .sec-company-mission {
+  padding-block: var(--space-9);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.tpl-company .sec-company-mission .wp-block-columns {
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.tpl-company .sec-company-mission .section-label {
+  opacity: 0.6;
+  margin: 0;
+  text-align: left;
+}
+
+.tpl-company .sec-company-mission .mission-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.tpl-company .sec-company-mission .mission-text {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* Company Profile セクション */
+.tpl-company .sec-company-profile {
+  padding-block: var(--space-9);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.tpl-company .sec-company-profile .wp-block-columns {
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.tpl-company .sec-company-profile .section-label {
+  opacity: 0.6;
+  margin: 0;
+  text-align: left;
+}
+
+.tpl-company .company-profile-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.tpl-company .profile-item {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1.5px dashed var(--c-border);
+  width: 100%;
+}
+
+.tpl-company .profile-label {
+  font-size: clamp(14px, 1.5vw, 16px);
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  margin: 0;
+  width: 150px;
+  flex-shrink: 0;
+  color: var(--c-muted);
+  text-align: left;
+}
+
+.tpl-company .profile-value {
+  font-size: clamp(16px, 1.8vw, 18px);
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  color: var(--c-fg);
+  text-align: left;
+}
+
+/* 代表挨拶 セクション */
+.tpl-company .sec-company-message {
+  padding-block: var(--space-9);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.tpl-company .sec-company-message .wp-block-columns {
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.tpl-company .sec-company-message .section-label {
+  opacity: 0.6;
+  margin: 0;
+  text-align: left;
+}
+
+.tpl-company .message-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.tpl-company .message-text {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  margin: 0;
+  color: var(--c-fg);
+}
+
+.tpl-company .message-signature {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  margin: var(--space-6) 0 0 0;
+  text-align: right;
+  color: var(--c-fg);
+}
+
+/* レスポンシブ */
+@media (max-width: 640px) {
+  .tpl-company .sec-company-mission,
+  .tpl-company .sec-company-profile,
+  .tpl-company .sec-company-message {
+    padding-block: var(--space-7);
+  }
+
+  .tpl-company .sec-company-mission .wp-block-columns,
+  .tpl-company .sec-company-profile .wp-block-columns,
+  .tpl-company .sec-company-message .wp-block-columns {
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .tpl-company .sec-company-mission .section-label,
+  .tpl-company .sec-company-profile .section-label,
+  .tpl-company .sec-company-message .section-label {
+    text-align: center;
+    margin-bottom: var(--space-6);
+  }
+
+  .tpl-company .sec-company-mission .mission-text {
+    text-align: center;
+  }
+
+  .tpl-company .profile-item {
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3) 0;
+  }
+
+  .tpl-company .profile-label {
+    min-width: auto;
+  }
+
+  .tpl-company .message-signature {
+    text-align: left;
+    margin-top: var(--space-5);
   }
 }

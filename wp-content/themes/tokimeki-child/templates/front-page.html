@@ -44,16 +44,24 @@
 		</div>
 		<!-- /wp:group -->
 
-		<!-- wp:query {"queryId":1,"query":{"perPage":3,"pages":0,"offset":0,"postType":"project","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"displayLayout":{"type":"flex","columns":1},"align":"wide"} -->
+		<!-- wp:query {"queryId":1,"query":{"perPage":4,"pages":0,"offset":0,"postType":"project","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"displayLayout":{"type":"flex","columns":1},"align":"wide"} -->
 		<div class="wp-block-query alignwide">
 			<!-- wp:post-template {"layout":{"type":"grid","columnCount":1}} -->
-				<!-- wp:group {"className":"project-card","layout":{"type":"constrained"}} -->
+				<!-- wp:group {"className":"project-card","layout":{"type":"flex","flexWrap":"nowrap"}} -->
 				<div class="wp-block-group project-card">
 					<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/3","className":"thumb"} /-->
 
-					<!-- wp:post-title {"level":3,"isLink":true,"className":"title"} /-->
+					<!-- wp:group {"className":"project-content","layout":{"type":"constrained"}} -->
+					<div class="wp-block-group project-content">
+						<!-- wp:post-title {"level":3,"isLink":true,"className":"title"} /-->
 
-					<!-- wp:post-excerpt {"excerptLength":20,"className":"subtitle"} /-->
+						<!-- wp:post-excerpt {"excerptLength":20,"className":"subtitle"} /-->
+
+						<!-- wp:paragraph {"className":"project-instagram-link"} -->
+						<p class="project-instagram-link"></p>
+						<!-- /wp:paragraph -->
+					</div>
+					<!-- /wp:group -->
 				</div>
 				<!-- /wp:group -->
 			<!-- /wp:post-template -->

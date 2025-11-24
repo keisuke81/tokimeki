@@ -116,7 +116,7 @@
 .project-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.5s ease;
 }
 
@@ -218,17 +218,258 @@
 /* ===== topページ ===== */
 /* TOPの Projects に入ったカードだけ角丸＆白カードに */
 .tpl-front .sec-top-projects .project-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-5);
   border-radius: var(--r-marubi);
   background: #fff;
   border: 1px solid var(--c-border);
   /* 黒の細線でラグジュアリー感 */
   box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
   padding: var(--space-5);
+  /* 高さを6割に */
+  min-height: auto;
+  height: auto;
+  /* 右側からスライドインのアニメーション用（透明度は変更しない） */
+  opacity: 1;
+  transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* カード内のサムネも角丸に */
+/* カード内のサムネも角丸に - 左上に配置、サイズ縮小 */
 .tpl-front .sec-top-projects .project-card .thumb {
+  flex-shrink: 0;
+  width: 280px;
+  height: 210px;
+  aspect-ratio: 4/3;
   border-radius: var(--r-marubi-inner);
   border: 1px solid var(--c-border);
   overflow: hidden;
+}
+
+/* モバイル表示時もカードの高さの80%に調整（仮の高さ300pxの80% = 240px） */
+@media (max-width: 640px) {
+  .tpl-front .sec-top-projects .project-card {
+    min-height: 300px;
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb {
+    height: 240px; /* 300pxの80% */
+    width: 320px; /* 4:3の比率を維持 */
+  }
+}
+
+.tpl-front .sec-top-projects .project-card .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* プロジェクトコンテンツ（右側） */
+.tpl-front .sec-top-projects .project-card .project-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* プロジェクトタイトル */
+.tpl-front .sec-top-projects .project-card .title {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+/* プロジェクト説明文 */
+.tpl-front .sec-top-projects .project-card .subtitle {
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+/* インスタグラムCTA */
+.tpl-front .sec-top-projects .project-card .project-instagram-link {
+  margin: 0;
+  margin-top: auto;
+}
+
+.tpl-front .sec-top-projects .project-card .project-instagram-link a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: #E4405F;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 50%;
+  font-size: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tpl-front .sec-top-projects .project-card .project-instagram-link a:hover {
+  opacity: 0.9;
+  transform: translateY(-1px) scale(1.05);
+}
+
+.tpl-front .sec-top-projects .project-card .project-instagram-link a svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.tpl-front .sec-top-projects .project-card .project-instagram-link:empty {
+  display: none;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 640px) {
+  .tpl-front .sec-top-projects .project-card {
+    flex-direction: column;
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4/3;
+  }
+}
+
+/* ===== ARCHIVE: Projects ページ - sec-top-projectsと同じスタイル ===== */
+.tpl-archive-project .sec-archive-projects .project-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-5);
+  border-radius: var(--r-marubi);
+  background: #fff;
+  border: 1px solid var(--c-border);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
+  padding: var(--space-5);
+  opacity: 1;
+  transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .thumb {
+  flex-shrink: 0;
+  width: 280px;
+  height: 210px;
+  aspect-ratio: 4/3;
+  border-radius: var(--r-marubi-inner);
+  border: 1px solid var(--c-border);
+  overflow: hidden;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .project-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .title {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .subtitle {
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .project-instagram-link {
+  margin: 0;
+  margin-top: auto;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .project-instagram-link a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: #E4405F;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 50%;
+  font-size: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .project-instagram-link a:hover {
+  opacity: 0.9;
+  transform: translateY(-1px) scale(1.05);
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .project-instagram-link a svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .project-instagram-link:empty {
+  display: none;
+}
+
+/* PC表示時：プロジェクトカードの高さを調整 */
+@media (min-width: 641px) {
+  .tpl-archive-project .sec-archive-projects .project-card {
+    min-height: 520px;
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .thumb {
+    width: 554px;
+    height: 416px; /* 520pxの80% */
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .title {
+    font-size: clamp(20px, 2.2vw, 28px);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+}
+
+/* モバイル表示時 */
+@media (max-width: 640px) {
+  .tpl-archive-project .sec-archive-projects .project-card {
+    flex-direction: column;
+    min-height: 300px;
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .thumb {
+    width: 100%;
+    height: 240px; /* 300pxの80% */
+    aspect-ratio: 4/3;
+  }
+
+  .tpl-archive-project .sec-archive-projects .header {
+    margin-left: var(--gutter);
+    padding: var(--space-3) var(--space-4);
+  }
 }

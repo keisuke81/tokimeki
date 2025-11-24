@@ -16,7 +16,8 @@
     rootMargin: '0px 0px -50px 0px'
   };
 
-  const observer = new IntersectionObserver((entries) => {
+  // 通常の要素用のオブザーバー（上からフェードイン）
+  const defaultObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.style.opacity = '1';
@@ -25,18 +26,50 @@
     });
   }, observerOptions);
 
-  // アニメーション対象要素を監視
-  const animateElements = document.querySelectorAll('.sec-mission, .sec-top-projects, .sec-top-news, .project-card, .news-item');
-  animateElements.forEach(el => {
+  // project-card用のオブザーバー（右側からスライドイン）- ギリギリのタイミング
+  const projectCardObserverOptions = {
+    threshold: 0.3, // 要素の30%が見えたらトリガー
+    rootMargin: '0px 0px -100px 0px' // 下から100px手前でトリガー
+  };
+
+  const projectCardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      // transitionを確実に適用
+      entry.target.style.transition = 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      
+      if (entry.isIntersecting) {
+        // ビューポートに入った時：右側からスライドイン
+        entry.target.style.transform = 'translateX(0)';
+        entry.target.classList.add('is-visible');
+      } else {
+        // ビューポートから外れた時：右側に戻す（逆アニメーション）
+        entry.target.style.transform = 'translateX(900px)';
+        entry.target.classList.remove('is-visible');
+      }
+    });
+  }, projectCardObserverOptions);
+
+  // 通常のアニメーション対象要素を監視
+  const defaultAnimateElements = document.querySelectorAll('.sec-mission, .sec-top-projects, .sec-top-news, .news-item');
+  defaultAnimateElements.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
+    defaultObserver.observe(el);
   });
 
-  // プロジェクトカードのホバー効果強化
-  const projectCards = document.querySelectorAll('.project-card');
+  // project-cardを監視（右側からスライドイン）- 透明度は変更せず横移動のみ
+  const projectCards = document.querySelectorAll('.tpl-front .sec-top-projects .project-card, .tpl-archive-project .sec-archive-projects .project-card');
   projectCards.forEach(card => {
+    card.style.opacity = '1'; // 透明度は1のまま
+    card.style.transform = 'translateX(900px)'; // 右側から400px移動（画面外から）
+    card.style.transition = 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // スムーズなイージング
+    projectCardObserver.observe(card);
+  });
+
+  // プロジェクトカードのホバー効果強化（アーカイブページ用）
+  const archiveProjectCards = document.querySelectorAll('.tpl-archive-project .project-card, .project-card:not(.tpl-front .sec-top-projects .project-card)');
+  archiveProjectCards.forEach(card => {
     card.addEventListener('mouseenter', function() {
       this.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
     });
