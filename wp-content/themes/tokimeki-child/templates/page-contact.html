@@ -1,0 +1,52 @@
+<!-- wp:template-part {"slug":"header","area":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"tpl-contact","style":{"spacing":{"blockGap":"0","margin":{"top":"0"}}},"layout":{"type":"default"}} -->
+<main class="wp-block-group tpl-contact" style="margin-top:0">
+
+	<!-- wp:group {"className":"sec-contact","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group sec-contact" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+		
+		<!-- wp:group {"className":"header","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+		<div class="wp-block-group header">
+			<!-- wp:heading {"level":1,"style":{"typography":{"fontSize":"clamp(1.5rem, 3vw, 2rem)","letterSpacing":"0.1em","textTransform":"uppercase","fontWeight":"400"}},"className":"page-title h2 section-label"} -->
+			<h1 class="wp-block-heading page-title h2 section-label" style="font-size:clamp(1.5rem, 3vw, 2rem);font-weight:400;letter-spacing:0.1em;text-transform:uppercase">(CONTACT)</h1>
+			<!-- /wp:heading -->
+		</div>
+		<!-- /wp:group -->
+
+		<!-- wp:columns {"align":"wide","style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+		<div class="wp-block-columns alignwide" style="margin-top:var(--wp--preset--spacing--60)">
+			<!-- wp:column {"width":"30%"} -->
+			<div class="wp-block-column" style="flex-basis:30%">
+				<!-- wp:heading {"level":2,"style":{"typography":{"fontSize":"clamp(1.5rem, 3vw, 2rem)","letterSpacing":"0.1em","textTransform":"uppercase","fontWeight":"400"}},"className":"section-label"} -->
+				<h2 class="wp-block-heading section-label" style="font-size:clamp(1.5rem, 3vw, 2rem);font-weight:400;letter-spacing:0.1em;text-transform:uppercase">(お問い合わせ)</h2>
+				<!-- /wp:heading -->
+
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"clamp(1rem, 1.5vw, 1.125rem)","lineHeight":"1.8","letterSpacing":"0.05em"}},"className":"contact-description"} -->
+				<p class="contact-description" style="font-size:clamp(1rem, 1.5vw, 1.125rem);line-height:1.8;letter-spacing:0.05em">お問い合わせやご相談がございましたら、<br>以下のフォームよりお気軽にご連絡ください。</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:column -->
+
+			<!-- wp:column {"width":"70%"} -->
+			<div class="wp-block-column" style="flex-basis:70%">
+				<!-- wp:group {"className":"contact-form-wrapper","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group contact-form-wrapper">
+					<!-- wp:shortcode -->
+					[mwform_formkey key="1"]
+					<!-- /wp:shortcode -->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+		</div>
+		<!-- /wp:columns -->
+
+	</div>
+	<!-- /wp:group -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","area":"footer","tagName":"footer"} /-->
+
