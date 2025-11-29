@@ -27,9 +27,11 @@
   }, observerOptions);
 
   // project-card用のオブザーバー（右側からスライドイン）- ギリギリのタイミング
+  // スマホサイズでも動作するように、thresholdとrootMarginを調整
+  const isMobile = window.innerWidth <= 640;
   const projectCardObserverOptions = {
-    threshold: 0.3, // 要素の30%が見えたらトリガー
-    rootMargin: '0px 0px -100px 0px' // 下から100px手前でトリガー
+    threshold: isMobile ? 0.1 : 0.3, // スマホでは10%、PCでは30%が見えたらトリガー
+    rootMargin: isMobile ? '0px 0px -50px 0px' : '0px 0px -100px 0px' // スマホでは50px、PCでは100px手前でトリガー
   };
 
   const projectCardObserver = new IntersectionObserver((entries) => {
@@ -43,7 +45,8 @@
         entry.target.classList.add('is-visible');
       } else {
         // ビューポートから外れた時：右側に戻す（逆アニメーション）
-        entry.target.style.transform = 'translateX(900px)';
+        const translateXValue = window.innerWidth <= 640 ? '400px' : '900px';
+        entry.target.style.transform = `translateX(${translateXValue})`;
         entry.target.classList.remove('is-visible');
       }
     });
@@ -62,7 +65,9 @@
   const projectCards = document.querySelectorAll('.tpl-front .sec-top-projects .project-card, .tpl-archive-project .sec-archive-projects .project-card');
   projectCards.forEach(card => {
     card.style.opacity = '1'; // 透明度は1のまま
-    card.style.transform = 'translateX(900px)'; // 右側から400px移動（画面外から）
+    // スマホサイズでは画面幅に応じた移動距離に調整
+    const translateXValue = window.innerWidth <= 640 ? '400px' : '900px';
+    card.style.transform = `translateX(${translateXValue})`;
     card.style.transition = 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // スムーズなイージング
     projectCardObserver.observe(card);
   });

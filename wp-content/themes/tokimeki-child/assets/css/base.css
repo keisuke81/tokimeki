@@ -29,7 +29,7 @@ svg {
   --c-fg: #000000;
   --c-muted: #666666;
   --c-border: #e0e0e0;
-  --c-gray: #f5f5f5;
+  --c-gray: #d0d0d0;
 
   --space-1: 8px;
   --space-2: 12px;
@@ -53,7 +53,7 @@ svg {
   --body: clamp(16px, 1.6vw, 18px);
   --cap: clamp(12px, 1.2vw, 14px);
 
-  --r-marubi: clamp(18px, 2.2vw, 28px);
+  --r-marubi: clamp(28px, 3.5vw, 48px);
   --r-marubi-inner: calc(var(--r-marubi) - 6px);
   --bg-band: #fafafa;
   --bg-card: #ffffff;

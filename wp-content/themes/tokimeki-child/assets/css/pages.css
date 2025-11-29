@@ -11,12 +11,25 @@
   max-width: none !important;
   margin: 0 !important;
   overflow: hidden;
+  border-radius: var(--r-marubi);
 }
 
 /* WordPressのconstrainedレイアウトの影響を無効化 */
 .sec-hero.is-layout-constrained,
 .sec-hero.wp-block-group.is-layout-constrained {
   max-width: none !important;
+}
+
+.sec-mission.is-layout-constrained,
+.sec-mission.wp-block-group.is-layout-constrained {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.sec-top-news.is-layout-constrained,
+.sec-top-news.wp-block-group.is-layout-constrained {
+  max-width: none !important;
+  width: 100% !important;
 }
 
 .sec-hero .wp-block-cover {
@@ -77,8 +90,12 @@
 .sec-mission {
   text-align: center;
   padding-block: var(--space-9);
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  background: var(--c-bg);
+  border-radius: var(--r-marubi);
+  padding-inline: var(--gutter);
 }
 
 .sec-mission .section-label {
@@ -100,11 +117,12 @@
   background: var(--c-bg);
   padding-top: var(--space-9);
   padding-bottom: calc(var(--space-9) + var(--space-6) + 520px); /* 4段目分の余白を追加（gap + card高さ） */
-  max-width: none;
-  width: 100%;
-  margin: 0;
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
   padding-inline: 0;
   overflow: visible;
+  border-radius: var(--r-marubi);
 }
 
 /* WordPressのconstrainedレイアウトの影響を無効化 */
@@ -222,9 +240,12 @@
 /* ===== NEWS SUMMARY ===== */
 .sec-top-news {
   padding-block: var(--space-9);
-  max-width: var(--max-w);
-  margin: 0 auto;
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
   padding-inline: var(--gutter);
+  background: var(--c-bg);
+  border-radius: var(--r-marubi);
 }
 
 .sec-top-news .header {
@@ -291,6 +312,8 @@
 /* ===== グローバルスタイル調整 ===== */
 .tpl-front {
   overflow-x: hidden;
+  background: var(--c-gray);
+  padding: 0;
 }
 
 /* projectsセクションの背景ロゴがはみ出すように、このセクションのみoverflowを許可 */
@@ -657,16 +680,20 @@
 /* ===== COMPANY ページ ===== */
 .tpl-company {
   overflow-x: hidden;
-  background: var(--c-bg);
+  background: var(--c-gray);
   min-height: 100vh;
+  padding: 0;
 }
 
 /* Mission セクション */
 .tpl-company .sec-company-mission {
   padding-block: var(--space-9);
-  max-width: var(--max-w);
-  margin: 0 auto;
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
   padding-inline: var(--gutter);
+  background: var(--c-bg);
+  border-radius: var(--r-marubi);
 }
 
 .tpl-company .sec-company-mission .wp-block-columns {
@@ -726,12 +753,26 @@
   text-align: left;
 }
 
+/* WordPressのconstrainedレイアウトの影響を無効化 */
+.tpl-company .sec-company-mission.is-layout-constrained,
+.tpl-company .sec-company-mission.wp-block-group.is-layout-constrained,
+.tpl-company .sec-company-profile.is-layout-constrained,
+.tpl-company .sec-company-profile.wp-block-group.is-layout-constrained,
+.tpl-company .sec-company-message.is-layout-constrained,
+.tpl-company .sec-company-message.wp-block-group.is-layout-constrained {
+  max-width: none !important;
+  width: 100% !important;
+}
+
 /* Company Profile セクション */
 .tpl-company .sec-company-profile {
   padding-block: var(--space-9);
-  max-width: var(--max-w);
-  margin: 0 auto;
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
   padding-inline: var(--gutter);
+  background: var(--c-bg);
+  border-radius: var(--r-marubi);
 }
 
 .tpl-company .sec-company-profile .wp-block-columns {
@@ -787,9 +828,12 @@
 /* 代表挨拶 セクション */
 .tpl-company .sec-company-message {
   padding-block: var(--space-9);
-  max-width: var(--max-w);
-  margin: 0 auto;
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
   padding-inline: var(--gutter);
+  background: var(--c-bg);
+  border-radius: var(--r-marubi);
 }
 
 .tpl-company .sec-company-message .wp-block-columns {

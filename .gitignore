@@ -1,0 +1,46 @@
+# WordPress Core
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/backup-db/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+wp-content/cache/
+wp-content/blogs.dir/
+wp-content/upgrade/
+wp-content/backups/
+
+# 開発環境
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.log
+*.swp
+*~
+.vscode/
+.idea/
+*.sublime-*
+
+# デプロイ関連
+.deploy-exclude
+deploy-*.sh
+DEPLOY.md
+
+# 一時ファイル
+*.tmp
+*.bak
+*.backup
+
+# Node modules (もし使用している場合)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Composer (もし使用している場合)
+vendor/
+composer.lock
+
