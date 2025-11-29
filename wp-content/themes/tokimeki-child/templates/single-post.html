@@ -1,0 +1,53 @@
+<!-- wp:template-part {"slug":"header","area":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"tpl-single-news","style":{"spacing":{"blockGap":"0","margin":{"top":"0"}}},"layout":{"type":"default"}} -->
+<main class="wp-block-group tpl-single-news" style="margin-top:0">
+
+	<!-- wp:group {"className":"sec-single-news","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group sec-single-news" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+		
+		<!-- wp:group {"className":"header","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+		<div class="wp-block-group header">
+			<!-- wp:heading {"level":1,"style":{"typography":{"fontSize":"clamp(1.5rem, 3vw, 2rem)","letterSpacing":"0.1em","textTransform":"uppercase","fontWeight":"400"}},"className":"page-title h2 section-label"} -->
+			<h1 class="wp-block-heading page-title h2 section-label" style="font-size:clamp(1.5rem, 3vw, 2rem);font-weight:400;letter-spacing:0.1em;text-transform:uppercase">(NEWS)</h1>
+			<!-- /wp:heading -->
+		</div>
+		<!-- /wp:group -->
+
+		<!-- wp:columns {"align":"wide"} -->
+		<div class="wp-block-columns alignwide">
+			<!-- wp:column {"width":"30%"} -->
+			<div class="wp-block-column" style="flex-basis:30%">
+				<!-- wp:group {"className":"news-single-meta","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group news-single-meta">
+					<!-- wp:post-date {"format":"Y/m/d","className":"news-date"} /-->
+					<!-- wp:post-terms {"term":"category","className":"news-tag"} /-->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+
+			<!-- wp:column {"width":"70%"} -->
+			<div class="wp-block-column" style="flex-basis:70%">
+				<!-- wp:group {"className":"news-single-content","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group news-single-content">
+					<!-- wp:post-title {"level":1,"style":{"typography":{"fontSize":"clamp(1.5rem, 3vw, 2.5rem)","lineHeight":"1.6","letterSpacing":"0.05em"}},"className":"news-single-title"} /-->
+					
+					<!-- wp:post-featured-image {"aspectRatio":"16/9","className":"news-single-image"} /-->
+					
+					<!-- wp:post-content {"layout":{"type":"constrained"}} /-->
+				</div>
+				<!-- /wp:group -->
+			</div>
+			<!-- /wp:column -->
+		</div>
+		<!-- /wp:columns -->
+
+	</div>
+	<!-- /wp:group -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","area":"footer","tagName":"footer"} /-->
+

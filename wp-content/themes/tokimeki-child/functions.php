@@ -81,3 +81,31 @@ add_action('enqueue_block_editor_assets', function () {
 add_action('wp_head', function () {
   echo "<!-- tokimeki-child head loaded (late enqueue) -->\n";
 }, 1000);
+
+/**
+ * ニュース記事のパーマリンクを /news/(ニュースタイトル) に変更
+ */
+add_filter('post_type_link', function ($post_link, $post) {
+  if ($post->post_type === 'post' && $post->post_status === 'publish') {
+    $post_link = home_url('/news/' . $post->post_name . '/');
+  }
+  return $post_link;
+}, 10, 2);
+
+/**
+ * リライトルールを追加して /news/(ニュースタイトル) を認識させる
+ */
+add_action('init', function () {
+  add_rewrite_rule(
+    '^news/([^/]+)/?$',
+    'index.php?name=$matches[1]',
+    'top'
+  );
+});
+
+/**
+ * パーマリンク構造をフラッシュ（初回のみ）
+ */
+add_action('after_switch_theme', function () {
+  flush_rewrite_rules();
+});

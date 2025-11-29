@@ -958,6 +958,8 @@
   background: var(--c-bg);
   transition: all 0.2s ease;
   margin-bottom: var(--space-4);
+  position: relative;
+  cursor: pointer;
 }
 
 .tpl-archive-news .news-item:hover {

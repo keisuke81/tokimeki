@@ -97,6 +97,24 @@
     });
   });
 
+  // ニュースアイテム全体をクリック可能にする
+  const newsItems = document.querySelectorAll('.tpl-archive-news .news-item');
+  newsItems.forEach(item => {
+    const titleLink = item.querySelector('.news-title a');
+    if (titleLink) {
+      const newsUrl = titleLink.getAttribute('href');
+      item.addEventListener('click', function(e) {
+        // 既存のリンク（画像やタイトル）をクリックした場合は、そのリンクの動作を優先
+        if (e.target.closest('a')) {
+          return;
+        }
+        // カード全体をクリックした場合は、タイトルのリンクに遷移
+        e.preventDefault();
+        window.location.href = newsUrl;
+      });
+    }
+  });
+
   // プロジェクトアーカイブページの機能
   const projectItems = document.querySelectorAll('.tpl-archive-project .project-item');
   if (projectItems.length > 0) {
