@@ -12,6 +12,10 @@
   margin: 0 !important;
   overflow: hidden;
   border-radius: var(--r-marubi);
+  /* デバイスサイズごとにヘッダーの高さ分のpadding-topを設定 */
+  /* インラインスタイルを上書きするため!importantを使用 */
+  padding-top: var(--header-height-mobile) !important; /* デフォルト（400px以下）: ヘッダー高さ80px */
+  padding-bottom: 0 !important;
 }
 
 /* WordPressのconstrainedレイアウトの影響を無効化 */
@@ -84,6 +88,77 @@
   text-align: center;
   margin: 0;
   padding: 0 var(--gutter);
+}
+
+/* デバイスサイズごとにヘッダーの高さを固定し、ヒーローセクションをその下に配置 */
+/* インラインスタイルを上書きするため!importantを使用 */
+/* 400px以下: ヘッダー高さ80px */
+@media (max-width: 400px) {
+  .sec-hero,
+  .sec-hero.wp-block-group {
+    padding-top: var(--header-height-mobile) !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* 401px - 640px: ヘッダー高さ85px */
+@media (min-width: 401px) and (max-width: 640px) {
+  .sec-hero,
+  .sec-hero.wp-block-group {
+    padding-top: var(--header-height-small) !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* 641px - 1024px: ヘッダー高さ95px */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .sec-hero,
+  .sec-hero.wp-block-group {
+    padding-top: var(--header-height-medium) !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* 1025px以上: ヘッダー高さ105px */
+@media (min-width: 1025px) {
+  .sec-hero,
+  .sec-hero.wp-block-group {
+    padding-top: var(--header-height-large) !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* aboutページの最初のセクションも同様にデバイスサイズごとにヘッダーの高さを設定 */
+/* 400px以下: ヘッダー高さ80px */
+@media (max-width: 400px) {
+  .tpl-company .sec-company-mission,
+  .tpl-company .sec-company-mission.wp-block-group {
+    padding-top: var(--header-height-mobile) !important;
+  }
+}
+
+/* 401px - 640px: ヘッダー高さ85px */
+@media (min-width: 401px) and (max-width: 640px) {
+  .tpl-company .sec-company-mission,
+  .tpl-company .sec-company-mission.wp-block-group {
+    padding-top: var(--header-height-small) !important;
+  }
+}
+
+/* 641px - 1024px: ヘッダー高さ95px */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tpl-company .sec-company-mission,
+  .tpl-company .sec-company-mission.wp-block-group {
+    padding-top: var(--header-height-medium) !important;
+  }
+}
+
+/* 1025px以上: ヘッダー高さ105px */
+@media (min-width: 1025px) {
+  .tpl-company .sec-company-mission,
+  .tpl-company .sec-company-mission.wp-block-group {
+    padding-top: var(--header-height-large) !important;
+  }
 }
 
 /* ===== MISSION ===== */
@@ -187,18 +262,18 @@
 .tpl-front .sec-top-projects .wp-block-post-template {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-6);
+  gap: var(--space-3);
 }
 
 /* PC表示時：プロジェクトカードの高さを調整 */
 @media (min-width: 641px) {
   .tpl-front .sec-top-projects .project-card {
-    min-height: 520px;
+    min-height: 380px;
   }
 
   .tpl-front .sec-top-projects .project-card .thumb {
-    width: 554px;
-    height: 416px; /* 520pxの80% */
+    width: 608px;
+    height: 342px; /* 16:9の比率、5%縮小 */
     overflow: visible;
     display: flex;
     align-items: center;
@@ -212,12 +287,20 @@
     height: auto;
     object-fit: contain;
     object-position: center;
+    border-radius: 0;
   }
 
   .tpl-front .sec-top-projects .project-card .title {
-    font-size: clamp(20px, 2.2vw, 28px);
-    font-weight: 500;
+    font-size: clamp(22px, 2.8vw, 32px);
+    font-weight: 700;
+    line-height: 1.4;
     letter-spacing: 0.03em;
+  }
+
+  .tpl-front .sec-top-projects .project-card .subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p {
+    font-size: clamp(18px, 2.2vw, 24px);
   }
 }
 
@@ -408,7 +491,7 @@
 .tpl-archive-project .wp-block-post-template {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-6);
+  gap: var(--space-3);
 }
 
 .tpl-archive-project .wp-block-post-template {
@@ -694,6 +777,9 @@
   padding-inline: var(--gutter);
   background: var(--c-bg);
   border-radius: var(--r-marubi);
+  /* デバイスサイズごとにヘッダーの高さ分のpadding-topを設定 */
+  /* インラインスタイルを上書きするため!importantを使用 */
+  padding-top: var(--header-height-mobile) !important; /* デフォルト（400px以下）: ヘッダー高さ80px */
 }
 
 .tpl-company .sec-company-mission .wp-block-columns {
@@ -949,10 +1035,10 @@
 /* ニュースアイテム */
 .tpl-archive-news .news-item {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 170px 1fr;
   gap: var(--space-6);
   align-items: flex-start;
-  padding: var(--space-6) var(--space-5);
+  padding: calc(var(--space-6) * 0.578) calc(var(--space-5) * 0.578);
   border: 1px solid var(--c-border);
   border-radius: var(--r-marubi-inner);
   background: var(--c-bg);
@@ -975,20 +1061,28 @@
 /* ニュースサムネイル */
 .tpl-archive-news .news-thumb {
   flex-shrink: 0;
-  width: 200px;
-  height: 150px;
-  aspect-ratio: 4/3;
-  overflow: hidden;
+  width: 170px;
+  height: 170px;
+  aspect-ratio: 1/1;
+  overflow: visible;
   border-radius: var(--r-marubi-inner);
   border: 1px solid var(--c-border);
-  background: var(--c-gray);
+  background: #fff;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
 }
 
 .tpl-archive-news .news-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 0;
   transition: transform 0.5s ease;
 }
 
@@ -1094,14 +1188,16 @@
 /* PC表示時：サムネイルを大きく */
 @media (min-width: 641px) {
   .tpl-archive-news .news-item {
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 238px 1fr;
     gap: var(--space-8);
-    padding: var(--space-8) var(--space-6);
+    padding: calc(var(--space-8) * 0.578) calc(var(--space-6) * 0.578);
   }
 
   .tpl-archive-news .news-thumb {
-    width: 280px;
-    height: 210px;
+    width: 238px;
+    height: 238px;
+    aspect-ratio: 1/1;
+    padding: 10px;
   }
 
   .tpl-archive-news .news-title {
@@ -1118,13 +1214,13 @@
   .tpl-archive-news .news-item {
     grid-template-columns: 1fr;
     gap: var(--space-4);
-    padding: var(--space-5) var(--space-4);
+    padding: calc(var(--space-5) * 0.578) calc(var(--space-4) * 0.578);
   }
 
   .tpl-archive-news .news-thumb {
     width: 100%;
     height: auto;
-    aspect-ratio: 4/3;
+    aspect-ratio: 1/1;
   }
 
   .tpl-archive-news .news-meta-group {

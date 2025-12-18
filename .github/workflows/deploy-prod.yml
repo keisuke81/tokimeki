@@ -1,0 +1,51 @@
+name: Deploy to Production Environment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # 手動実行も可能にする
+
+jobs:
+  deploy:
+    name: Deploy to Production (example.com)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PROD_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.PROD_HOST }} >> ~/.ssh/known_hosts
+      
+      - name: Deploy theme files
+        run: |
+          rsync -avz \
+            --delete \
+            --exclude='.git' \
+            --exclude='.gitignore' \
+            --exclude='.github' \
+            --exclude='.DS_Store' \
+            --exclude='*.log' \
+            --exclude='*.swp' \
+            --exclude='*~' \
+            --exclude='.vscode' \
+            --exclude='.idea' \
+            --exclude='node_modules' \
+            --exclude='vendor' \
+            --exclude='wp-config.php' \
+            --exclude='deploy-*.sh' \
+            --exclude='*.md' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            wp-content/themes/tokimeki-child/ \
+            ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_PATH }}/wp-content/themes/tokimeki-child/
+      
+      - name: Deploy success notification
+        run: |
+          echo "✅ 本番環境へのデプロイが完了しました！"
+          echo "URL: https://${{ secrets.PROD_HOST }}"
+

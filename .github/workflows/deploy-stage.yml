@@ -1,0 +1,51 @@
+name: Deploy to Staging Environment
+
+on:
+  push:
+    branches:
+      - stage
+  workflow_dispatch: # 手動実行も可能にする
+
+jobs:
+  deploy:
+    name: Deploy to Staging (dev.example.com)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGE_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.STAGE_HOST }} >> ~/.ssh/known_hosts
+      
+      - name: Deploy theme files
+        run: |
+          rsync -avz \
+            --delete \
+            --exclude='.git' \
+            --exclude='.gitignore' \
+            --exclude='.github' \
+            --exclude='.DS_Store' \
+            --exclude='*.log' \
+            --exclude='*.swp' \
+            --exclude='*~' \
+            --exclude='.vscode' \
+            --exclude='.idea' \
+            --exclude='node_modules' \
+            --exclude='vendor' \
+            --exclude='wp-config.php' \
+            --exclude='deploy-*.sh' \
+            --exclude='*.md' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            wp-content/themes/tokimeki-child/ \
+            ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }}:${{ secrets.STAGE_PATH }}/wp-content/themes/tokimeki-child/
+      
+      - name: Deploy success notification
+        run: |
+          echo "✅ ステージング環境へのデプロイが完了しました！"
+          echo "URL: https://${{ secrets.STAGE_HOST }}"
+

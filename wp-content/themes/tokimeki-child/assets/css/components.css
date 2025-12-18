@@ -1,4 +1,12 @@
 /* ===== Header（Fixed + 縮小） ===== */
+/* ヘッダーの高さをCSS変数で管理 */
+:root {
+  --header-height-mobile: 80px; /* 400px以下: padding 25px × 2 + ロゴ高さ約30px */
+  --header-height-small: 85px; /* 401px-640px: padding 25px × 2 + ロゴ高さ約35px */
+  --header-height-medium: 95px; /* 641px-1024px: padding 25px × 2 + ロゴ高さ約45px */
+  --header-height-large: 105px; /* 1025px以上: padding 25px × 2 + ロゴ高さ約55px */
+}
+
 .site-header,
 .wp-block-group.has-base-background-color.has-background {
   position: fixed;
@@ -21,12 +29,16 @@
 /* メインコンテンツにヘッダー分のスペースを確保 */
 main,
 main.wp-block-group,
-.tpl-front,
-.tpl-company,
 .tpl-archive-project,
 .tpl-archive-news,
 .tpl-contact {
   padding-top: 84px; /* ヘッダーの高さ分（padding 24px × 2 + コンテンツ高さ約36px） */
+}
+
+/* トップページとaboutページは最初のセクションがヘッダーの直下に来るようにpadding-topを0に */
+.tpl-front,
+.tpl-company {
+  padding-top: 0;
 }
 
 .site-brand {
@@ -247,7 +259,7 @@ main.wp-block-group,
   z-index: 2;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-5);
   border-radius: var(--r-marubi);
   background: #fff;
@@ -266,27 +278,27 @@ main.wp-block-group,
 /* カード内のサムネも角丸に - 左上に配置、サイズ縮小 */
 .tpl-front .sec-top-projects .project-card .thumb {
   flex-shrink: 0;
-  width: 280px;
-  height: 210px;
-  aspect-ratio: 4/3;
+  width: 320px;
+  height: 180px;
+  aspect-ratio: 16/9;
   border-radius: var(--r-marubi-inner);
   border: 1px solid var(--c-border);
   overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--c-gray);
+  background: #fff;
 }
 
 /* モバイル表示時もカードの高さの80%に調整（仮の高さ300pxの80% = 240px） */
 @media (max-width: 640px) {
   .tpl-front .sec-top-projects .project-card {
-    min-height: 300px;
+    min-height: 285px;
   }
 
   .tpl-front .sec-top-projects .project-card .thumb {
-    height: 240px; /* 300pxの80% */
-    width: 320px; /* 4:3の比率を維持 */
+    height: 180px; /* 16:9の比率を維持 */
+    width: 320px;
   }
 }
 
@@ -297,6 +309,7 @@ main.wp-block-group,
   height: auto;
   object-fit: contain;
   object-position: center;
+  border-radius: 0;
 }
 
 /* プロジェクトコンテンツ（右側） */
@@ -306,24 +319,31 @@ main.wp-block-group,
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  justify-content: center;
 }
 
 /* プロジェクトタイトル */
 .tpl-front .sec-top-projects .project-card .title {
   margin: 0;
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 400;
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.02em;
 }
 
 /* プロジェクト説明文 */
-.tpl-front .sec-top-projects .project-card .subtitle {
+.tpl-front .sec-top-projects .project-card .subtitle,
+.tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle,
+.tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p {
   margin: 0;
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 1.6;
   letter-spacing: 0.02em;
   opacity: 0.7;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  display: block;
 }
 
 /* インスタグラムCTA */
@@ -372,7 +392,7 @@ main.wp-block-group,
   .tpl-front .sec-top-projects .project-card .thumb {
     width: 100%;
     height: auto;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/9;
   }
 }
 
@@ -382,7 +402,7 @@ main.wp-block-group,
   z-index: 2;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-5);
   border-radius: var(--r-marubi);
   background: #fff;
@@ -395,16 +415,16 @@ main.wp-block-group,
 
 .tpl-archive-project .sec-archive-projects .project-card .thumb {
   flex-shrink: 0;
-  width: 280px;
-  height: 210px;
-  aspect-ratio: 4/3;
+  width: 320px;
+  height: 180px;
+  aspect-ratio: 16/9;
   border-radius: var(--r-marubi-inner);
   border: 1px solid var(--c-border);
   overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--c-gray);
+  background: #fff;
 }
 
 .tpl-archive-project .sec-archive-projects .project-card .thumb img {
@@ -414,6 +434,7 @@ main.wp-block-group,
   height: auto;
   object-fit: contain;
   object-position: center;
+  border-radius: 0;
 }
 
 .tpl-archive-project .sec-archive-projects .project-card .project-content {
@@ -422,22 +443,29 @@ main.wp-block-group,
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  justify-content: center;
 }
 
 .tpl-archive-project .sec-archive-projects .project-card .title {
   margin: 0;
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 400;
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.02em;
 }
 
-.tpl-archive-project .sec-archive-projects .project-card .subtitle {
+.tpl-archive-project .sec-archive-projects .project-card .subtitle,
+.tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle,
+.tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle p {
   margin: 0;
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 1.6;
   letter-spacing: 0.02em;
   opacity: 0.7;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  display: block;
 }
 
 .tpl-archive-project .sec-archive-projects .project-card .project-instagram-link {
@@ -479,12 +507,12 @@ main.wp-block-group,
 /* PC表示時：プロジェクトカードの高さを調整 */
 @media (min-width: 641px) {
   .tpl-archive-project .sec-archive-projects .project-card {
-    min-height: 520px;
+    min-height: 380px;
   }
 
   .tpl-archive-project .sec-archive-projects .project-card .thumb {
-    width: 554px;
-    height: 416px; /* 520pxの80% */
+    width: 608px;
+    height: 342px; /* 16:9の比率、5%縮小 */
     overflow: visible;
     display: flex;
     align-items: center;
@@ -498,12 +526,20 @@ main.wp-block-group,
     height: auto;
     object-fit: contain;
     object-position: center;
+    border-radius: 0;
   }
 
   .tpl-archive-project .sec-archive-projects .project-card .title {
-    font-size: clamp(20px, 2.2vw, 28px);
-    font-weight: 500;
+    font-size: clamp(22px, 2.8vw, 32px);
+    font-weight: 700;
+    line-height: 1.4;
     letter-spacing: 0.03em;
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .subtitle,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle p {
+    font-size: clamp(18px, 2.2vw, 24px);
   }
 }
 
@@ -511,13 +547,13 @@ main.wp-block-group,
 @media (max-width: 640px) {
   .tpl-archive-project .sec-archive-projects .project-card {
     flex-direction: column;
-    min-height: 300px;
+    min-height: 285px;
   }
 
   .tpl-archive-project .sec-archive-projects .project-card .thumb {
     width: 100%;
-    height: 240px; /* 300pxの80% */
-    aspect-ratio: 4/3;
+    height: auto;
+    aspect-ratio: 16/9;
   }
 
   .tpl-archive-project .sec-archive-projects .header {
