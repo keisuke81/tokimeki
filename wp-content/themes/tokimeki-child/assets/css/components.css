@@ -254,72 +254,93 @@ main.wp-block-group,
 }
 /* ===== topページ ===== */
 /* TOPの Projects に入ったカードだけ角丸＆白カードに */
+/* ===== FRONT PAGE: Projects ページ - PCと同様に横並び ===== */
 .tpl-front .sec-top-projects .project-card {
   position: relative;
   z-index: 2;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-5);
+  flex-direction: row; /* 全デバイスで横並び */
+  align-items: center !important; /* cardの高さの中央揃え */
+  gap: var(--space-4);
   border-radius: var(--r-marubi);
   background: #fff;
   border: 1px solid var(--c-border);
   /* 黒の細線でラグジュアリー感 */
   box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-  padding: var(--space-5);
-  /* 高さを6割に */
-  min-height: auto;
-  height: auto;
+  padding: var(--space-4);
+  /* 高さを自動調整 */
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
   /* 右側からスライドインのアニメーション用（透明度は変更しない） */
   opacity: 1;
   transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* カード内のサムネも角丸に - 左上に配置、サイズ縮小 */
+/* カード内のサムネも角丸に - 全デバイス共通 */
 .tpl-front .sec-top-projects .project-card .thumb {
   flex-shrink: 0;
-  width: 320px;
-  height: 180px;
+  width: 30%; /* cardの30%を使用（PCと同じ） */
+  height: auto;
   aspect-ratio: 16/9;
   border-radius: var(--r-marubi-inner);
   border: 1px solid var(--c-border);
-  overflow: visible;
+  overflow: hidden; /* パディングを設けるためhiddenに変更 */
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
+  padding: var(--space-2); /* 画像と枠の間にパディングを追加 */
+  box-sizing: border-box; /* パディングを含めたサイズ計算 */
+  align-self: center; /* 画像を中央揃え */
 }
 
-/* モバイル表示時もカードの高さの80%に調整（仮の高さ300pxの80% = 240px） */
-@media (max-width: 640px) {
-  .tpl-front .sec-top-projects .project-card {
-    min-height: 285px;
-  }
-
-  .tpl-front .sec-top-projects .project-card .thumb {
-    height: 180px; /* 16:9の比率を維持 */
-    width: 320px;
-  }
+.tpl-front .sec-top-projects .project-card .thumb figure,
+.tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image,
+.tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image figure {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
 }
 
-.tpl-front .sec-top-projects .project-card .thumb img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
+.tpl-front .sec-top-projects .project-card .thumb img,
+.tpl-front .sec-top-projects .project-card .thumb figure img,
+.tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
   border-radius: 0;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
-/* プロジェクトコンテンツ（右側） */
+/* プロジェクトコンテンツ - 全デバイス共通 */
 .tpl-front .sec-top-projects .project-card .project-content {
   flex: 1;
+  width: 70%; /* cardの70%を使用（PCと同じ） */
+  max-width: 70%;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  justify-content: center;
+  justify-content: flex-start !important;
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-right: var(--space-4); /* 画像の左側のマージンと等しくする */
+  align-items: flex-start;
+  text-align: left;
 }
 
 /* プロジェクトタイトル */
@@ -329,21 +350,50 @@ main.wp-block-group,
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.02em;
+  text-align: left; /* デフォルトは左寄せ */
+  width: 100%;
 }
 
-/* プロジェクト説明文 */
+/* PC表示時：タイトルを中央寄せ */
+@media (min-width: 1025px) {
+  .tpl-front .sec-top-projects .project-card .title {
+    text-align: center !important;
+  }
+}
+
+/* プロジェクト説明文 - 全文表示を確実にする */
 .tpl-front .sec-top-projects .project-card .subtitle,
 .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle,
-.tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p {
-  margin: 0;
-  font-size: clamp(16px, 2vw, 20px);
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-  opacity: 0.7;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
-  display: block;
+.tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p,
+.tpl-front .sec-top-projects .project-card .wp-block-post-excerpt__excerpt,
+.tpl-front .sec-top-projects .project-card .wp-block-post-excerpt,
+.tpl-front .sec-top-projects .project-card .wp-block-post-excerpt * {
+  margin: 0 !important;
+  text-align: left !important;
+  font-size: clamp(14px, 1.8vw, 18px) !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.02em !important;
+  color: #000000 !important; /* 黒色に変更 */
+  opacity: 1 !important; /* 不透明度を1に変更 */
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  display: block !important;
+  /* -webkit-line-clampを完全に無効化 */
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  max-height: none !important;
+  height: auto !important;
+  min-height: auto !important;
+  /* display: -webkit-boxを無効化 */
+}
+
+/* wp-block-post-excerptをproject-content内で中央配置（テキストは左寄せのまま） */
+.tpl-front .sec-top-projects .project-card .project-content .wp-block-post-excerpt {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* インスタグラムCTA */
@@ -383,89 +433,455 @@ main.wp-block-group,
   display: none;
 }
 
-/* レスポンシブ対応 */
-@media (max-width: 640px) {
+/* タブレット表示時（641px - 1024px）：PCと同様に横並び */
+@media (min-width: 641px) and (max-width: 1024px) {
   .tpl-front .sec-top-projects .project-card {
-    flex-direction: column;
+    flex-direction: row; /* タブレットも横並び */
+    gap: var(--space-5);
+    align-items: center !important; /* cardの高さの中央揃え */
   }
 
   .tpl-front .sec-top-projects .project-card .thumb {
-    width: 100%;
+    width: 30%; /* cardの30%を使用（PCと同じ） */
     height: auto;
     aspect-ratio: 16/9;
+    flex-shrink: 0;
+    align-self: center; /* 画像を中央揃え */
+  }
+
+  .tpl-front .sec-top-projects .project-card .project-content {
+    flex: 1;
+    width: 70%; /* cardの70%を使用（PCと同じ） */
+    max-width: 70%;
+    padding-right: var(--space-4); /* 画像の左側のマージンと等しくする */
+  }
+
+  /* タイトルを中央寄せ */
+  .tpl-front .sec-top-projects .project-card .title {
+    text-align: center !important;
+    width: 100%;
   }
 }
 
-/* ===== ARCHIVE: Projects ページ - sec-top-projectsと同じスタイル ===== */
+/* PC表示時（1025px以上）：横並び */
+@media (min-width: 1025px) {
+  .tpl-front .sec-top-projects .project-card {
+    flex-direction: row; /* PCは横並び */
+    gap: var(--space-5);
+    align-items: center !important; /* cardの高さの中央揃え */
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb {
+    width: 30%; /* cardの30%を使用 */
+    height: auto;
+    aspect-ratio: 16/9;
+    flex-shrink: 0;
+    align-self: center; /* 画像を中央揃え */
+  }
+
+  .tpl-front .sec-top-projects .project-card .project-content {
+    flex: 1;
+    width: 70%; /* cardの70%を使用 */
+    max-width: 70%;
+    padding-right: var(--space-4); /* 画像の左側のマージンと等しくする */
+  }
+
+  .tpl-front .sec-top-projects .project-card .title {
+    font-size: clamp(22px, 2.8vw, 32px);
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    text-align: center !important; /* PC表示時は中央寄せ */
+  }
+
+  .tpl-front .sec-top-projects .project-card .subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt__excerpt,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt * {
+    font-size: clamp(16px, 2vw, 22px) !important;
+    line-height: 1.8 !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
+  }
+}
+
+/* スマホ表示時（640px以下）：画像とタイトルを2カラム、テキストを1カラム */
+@media (max-width: 640px) {
+  .tpl-front .sec-top-projects .project-card {
+    flex-direction: column !important; /* 縦方向に変更 */
+    gap: var(--space-2) !important;
+    min-height: auto;
+    height: auto;
+    align-items: stretch !important;
+    padding: var(--space-2); /* パディングを縮める */
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb {
+    width: auto !important; /* 幅を自動にして画像のサイズに合わせる */
+    height: 70px !important; /* 高さを70pxに固定 */
+    aspect-ratio: unset !important; /* aspect-ratioを無効化 */
+    flex-shrink: 0 !important;
+    border-radius: 0 !important; /* 角丸を削除 */
+    border: none !important; /* 枠を削除 */
+    padding-top: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: var(--space-1) !important; /* 左側のパディングをさらに小さく */
+    box-sizing: border-box !important;
+    overflow: visible !important; /* 画像が切れないようにvisibleに */
+    background: transparent !important; /* 背景を透明に */
+    align-self: flex-start !important; /* 上揃え */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+  
+  .tpl-front .sec-top-projects .project-card .thumb figure {
+    border-radius: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  
+  /* 画像とタイトルを同じ行に配置 */
+  .tpl-front .sec-top-projects .project-card {
+    display: grid !important;
+    grid-template-columns: auto 1fr; /* 画像は自動幅、タイトル残り */
+    grid-template-rows: auto auto; /* 2行 */
+    gap: var(--space-2) !important;
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb {
+    grid-column: 1; /* 1列目 */
+    grid-row: 1; /* 1行目 */
+    align-self: flex-start !important; /* 上揃え */
+  }
+
+  .tpl-front .sec-top-projects .project-card .project-content {
+    grid-column: 2; /* 2列目 */
+    grid-row: 1; /* 1行目 */
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    align-items: flex-start !important;
+  }
+
+  /* project-contentからテキストをGridで配置するために、project-contentをGridに */
+  .tpl-front .sec-top-projects .project-card .project-content {
+    display: contents !important; /* Gridの子要素として直接配置 */
+  }
+
+  /* タイトルを2列目1行目に配置 */
+  .tpl-front .sec-top-projects .project-card .title {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    width: 100% !important;
+    font-size: clamp(16px, 2vw, 24px) !important; /* フォントサイズを小さくして1行表示に */
+    line-height: 1.2 !important; /* 行間を縮める */
+    min-height: 70px !important; /* 画像の高さ（70px）に合わせる */
+    height: 70px !important; /* 画像の高さ（70px）に合わせる */
+    white-space: nowrap !important; /* 1行表示 */
+    overflow: hidden !important; /* はみ出しを隠す */
+    text-overflow: ellipsis !important; /* 省略記号を表示 */
+    display: flex !important; /* flexboxで中央揃え */
+    align-items: center !important; /* 縦方向中央揃え */
+    justify-content: flex-start !important; /* 横方向左揃え */
+  }
+
+  /* テキストを全列2行目に配置 */
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb figure,
+  .tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image,
+  .tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image figure {
+    width: auto !important; /* 幅を自動にして画像のサイズに合わせる */
+    height: 70px !important; /* 高さを70pxに固定 */
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important; /* 左揃え */
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    aspect-ratio: unset !important; /* aspect-ratioを無効化して画像の比率を保持 */
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb img,
+  .tpl-front .sec-top-projects .project-card .thumb figure img,
+  .tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image img {
+    width: auto !important; /* 幅を自動にして画像の比率を保持 */
+    height: 70px !important; /* 高さを70pxに固定 */
+    max-width: none !important; /* 最大幅の制限を解除 */
+    max-height: 70px !important; /* 最大高さも70pxに */
+    min-width: auto !important;
+    min-height: 70px !important; /* 最小高さも70pxに */
+    object-fit: contain !important; /* containで画像の比率を保持 */
+    object-position: center !important; /* 中央に配置 */
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+  }
+
+  .tpl-front .sec-top-projects .project-card .subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt__excerpt,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt * {
+    font-size: clamp(13px, 1.5vw, 16px) !important; /* フォントサイズを少し縮める */
+    line-height: 1.5 !important; /* 行間を縮める（1.8から1.5に） */
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb figure,
+  .tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image,
+  .tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image figure {
+    width: auto !important; /* 幅を自動にして画像のサイズに合わせる */
+    height: 70px !important; /* 高さを70pxに固定 */
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important; /* 左揃え */
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    aspect-ratio: unset !important; /* aspect-ratioを無効化して画像の比率を保持 */
+  }
+
+  .tpl-front .sec-top-projects .project-card .thumb img,
+  .tpl-front .sec-top-projects .project-card .thumb figure img,
+  .tpl-front .sec-top-projects .project-card .thumb .wp-block-post-featured-image img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .tpl-front .sec-top-projects .project-card .project-content {
+    width: 100%;
+    min-height: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 中央揃え */
+  }
+
+  /* タイトルをproject-cardの中央寄せ */
+  .tpl-front .sec-top-projects .project-card .title {
+    text-align: center !important;
+    width: 100%;
+  }
+
+  /* excerptのwidthを画像の横幅と合わせる */
+  .tpl-front .sec-top-projects .project-card .project-content .wp-block-post-excerpt {
+    width: 100% !important; /* 画像の横幅と同じ（スマホは100%） */
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .tpl-front .sec-top-projects .project-card .subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt__excerpt,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt,
+  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt * {
+    font-size: clamp(14px, 1.6vw, 18px) !important;
+    line-height: 1.8 !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
+  }
+}
+
+/* ===== ARCHIVE: Projects ページ - PCと同様に横並び ===== */
 .tpl-archive-project .sec-archive-projects .project-card {
   position: relative;
   z-index: 2;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-5);
+  flex-direction: row; /* 全デバイスで横並び */
+  align-items: center !important; /* cardの高さの中央揃え */
+  gap: var(--space-4);
   border-radius: var(--r-marubi);
   background: #fff;
   border: 1px solid var(--c-border);
+  /* 黒の細線でラグジュアリー感 */
   box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-  padding: var(--space-5);
+  padding: var(--space-4);
+  /* 高さを自動調整 */
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
+  /* 右側からスライドインのアニメーション用（透明度は変更しない） */
   opacity: 1;
   transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* カード内のサムネも角丸に - 全デバイス共通 */
 .tpl-archive-project .sec-archive-projects .project-card .thumb {
   flex-shrink: 0;
-  width: 320px;
-  height: 180px;
+  width: 30%; /* cardの30%を使用（PCと同じ） */
+  height: auto;
   aspect-ratio: 16/9;
   border-radius: var(--r-marubi-inner);
   border: 1px solid var(--c-border);
-  overflow: visible;
+  overflow: hidden; /* パディングを設けるためhiddenに変更 */
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
+  padding: var(--space-2); /* 画像と枠の間にパディングを追加 */
+  box-sizing: border-box; /* パディングを含めたサイズ計算 */
+  align-self: center; /* 画像を中央揃え */
 }
 
-.tpl-archive-project .sec-archive-projects .project-card .thumb img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
+.tpl-archive-project .sec-archive-projects .project-card .thumb figure,
+.tpl-archive-project .sec-archive-projects .project-card .thumb .wp-block-post-featured-image,
+.tpl-archive-project .sec-archive-projects .project-card .thumb .wp-block-post-featured-image figure {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.tpl-archive-project .sec-archive-projects .project-card .thumb img,
+.tpl-archive-project .sec-archive-projects .project-card .thumb figure img,
+.tpl-archive-project .sec-archive-projects .project-card .thumb .wp-block-post-featured-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
   border-radius: 0;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
+/* プロジェクトコンテンツ - 全デバイス共通 */
 .tpl-archive-project .sec-archive-projects .project-card .project-content {
   flex: 1;
+  width: 70%; /* cardの70%を使用（PCと同じ） */
+  max-width: 70%;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  justify-content: center;
+  justify-content: flex-start !important;
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-right: var(--space-4); /* 画像の左側のマージンと等しくする */
+  align-items: flex-start;
+  text-align: left;
 }
 
+/* プロジェクトタイトル */
 .tpl-archive-project .sec-archive-projects .project-card .title {
   margin: 0;
   font-size: clamp(20px, 2.5vw, 28px);
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.02em;
+  text-align: left; /* デフォルトは左寄せ */
+  width: 100%;
 }
 
+/* PC表示時：タイトルを中央寄せ */
+@media (min-width: 1025px) {
+  .tpl-archive-project .sec-archive-projects .project-card .title {
+    text-align: center !important;
+  }
+}
+
+/* プロジェクト説明文 - 全文表示を確実にする */
 .tpl-archive-project .sec-archive-projects .project-card .subtitle,
 .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle,
-.tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle p {
-  margin: 0;
-  font-size: clamp(16px, 2vw, 20px);
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-  opacity: 0.7;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
-  display: block;
+.tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle p,
+.tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt__excerpt,
+.tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt,
+.tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt * {
+  margin: 0 !important;
+  text-align: left !important;
+  font-size: clamp(14px, 1.8vw, 18px) !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.02em !important;
+  color: #000000 !important; /* 黒色に変更 */
+  opacity: 1 !important; /* 不透明度を1に変更 */
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  display: block !important;
+  /* -webkit-line-clampを完全に無効化 */
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  max-height: none !important;
+  height: auto !important;
+  min-height: auto !important;
+  /* display: -webkit-boxを無効化 */
+}
+
+/* wp-block-post-excerptをproject-content内で中央配置（テキストは左寄せのまま） */
+.tpl-archive-project .sec-archive-projects .project-card .project-content .wp-block-post-excerpt {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+  max-width: 100%;
 }
 
 .tpl-archive-project .sec-archive-projects .project-card .project-instagram-link {
@@ -504,29 +920,57 @@ main.wp-block-group,
   display: none;
 }
 
-/* PC表示時：プロジェクトカードの高さを調整 */
-@media (min-width: 641px) {
+/* タブレット表示時（641px - 1024px）：PCと同様に横並び */
+@media (min-width: 641px) and (max-width: 1024px) {
   .tpl-archive-project .sec-archive-projects .project-card {
-    min-height: 380px;
+    flex-direction: row; /* タブレットも横並び */
+    gap: var(--space-5);
+    align-items: center !important; /* cardの高さの中央揃え */
   }
 
   .tpl-archive-project .sec-archive-projects .project-card .thumb {
-    width: 608px;
-    height: 342px; /* 16:9の比率、5%縮小 */
-    overflow: visible;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 30%; /* cardの30%を使用（PCと同じ） */
+    height: auto;
+    aspect-ratio: 16/9;
+    flex-shrink: 0;
+    align-self: center; /* 画像を中央揃え */
   }
 
-  .tpl-archive-project .sec-archive-projects .project-card .thumb img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
+  .tpl-archive-project .sec-archive-projects .project-card .project-content {
+    flex: 1;
+    width: 70%; /* cardの70%を使用（PCと同じ） */
+    max-width: 70%;
+    padding-right: var(--space-4); /* 画像の左側のマージンと等しくする */
+  }
+
+  /* タイトルを中央寄せ */
+  .tpl-archive-project .sec-archive-projects .project-card .title {
+    text-align: center !important;
+    width: 100%;
+  }
+}
+
+/* PC表示時（1025px以上）：横並び */
+@media (min-width: 1025px) {
+  .tpl-archive-project .sec-archive-projects .project-card {
+    flex-direction: row; /* PCは横並び */
+    gap: var(--space-5);
+    align-items: center !important; /* cardの高さの中央揃え */
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .thumb {
+    width: 30%; /* cardの30%を使用 */
     height: auto;
-    object-fit: contain;
-    object-position: center;
-    border-radius: 0;
+    aspect-ratio: 16/9;
+    flex-shrink: 0;
+    align-self: center; /* 画像を中央揃え */
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .project-content {
+    flex: 1;
+    width: 70%; /* cardの70%を使用 */
+    max-width: 70%;
+    padding-right: var(--space-4); /* 画像の左側のマージンと等しくする */
   }
 
   .tpl-archive-project .sec-archive-projects .project-card .title {
@@ -534,30 +978,214 @@ main.wp-block-group,
     font-weight: 700;
     line-height: 1.4;
     letter-spacing: 0.03em;
+    text-align: center !important; /* PC表示時は中央寄せ */
   }
 
   .tpl-archive-project .sec-archive-projects .project-card .subtitle,
   .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle,
-  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle p {
-    font-size: clamp(18px, 2.2vw, 24px);
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle p,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt__excerpt,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt * {
+    font-size: clamp(16px, 2vw, 22px) !important;
+    line-height: 1.8 !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
   }
 }
 
-/* モバイル表示時 */
+/* スマホ表示時（640px以下）：画像とタイトルを2カラム、テキストを1カラム */
 @media (max-width: 640px) {
   .tpl-archive-project .sec-archive-projects .project-card {
-    flex-direction: column;
-    min-height: 285px;
+    flex-direction: column !important; /* 縦方向に変更 */
+    gap: var(--space-2) !important;
+    min-height: auto;
+    height: auto;
+    align-items: stretch !important;
+    padding: var(--space-2); /* パディングを縮める */
   }
 
   .tpl-archive-project .sec-archive-projects .project-card .thumb {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16/9;
+    width: auto !important; /* 幅を自動にして画像のサイズに合わせる */
+    height: 70px !important; /* 高さを70pxに固定 */
+    aspect-ratio: unset !important; /* aspect-ratioを無効化 */
+    flex-shrink: 0 !important;
+    border-radius: 0 !important; /* 角丸を削除 */
+    border: none !important; /* 枠を削除 */
+    padding-top: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: var(--space-1) !important; /* 左側のパディングをさらに小さく */
+    box-sizing: border-box !important;
+    overflow: visible !important; /* 画像が切れないようにvisibleに */
+    background: transparent !important; /* 背景を透明に */
+    align-self: flex-start !important; /* 上揃え */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
   }
 
+  .tpl-archive-project .sec-archive-projects .project-card .thumb figure {
+    border-radius: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  
+  /* 画像とタイトルを同じ行に配置 */
+  .tpl-archive-project .sec-archive-projects .project-card {
+    display: grid !important;
+    grid-template-columns: auto 1fr; /* 画像は自動幅、タイトル残り */
+    grid-template-rows: auto auto; /* 2行 */
+    gap: var(--space-2) !important;
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .thumb {
+    grid-column: 1; /* 1列目 */
+    grid-row: 1; /* 1行目 */
+    align-self: flex-start !important; /* 上揃え */
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .project-content {
+    grid-column: 2; /* 2列目 */
+    grid-row: 1; /* 1行目 */
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    align-items: flex-start !important;
+  }
+
+  /* タイトルのみを表示（1行目） */
+  .tpl-archive-project .sec-archive-projects .project-card .project-content .title {
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important; /* 左寄せ */
+    width: 100% !important;
+  }
+
+  /* テキストを2行目に全幅で配置 */
+  .tpl-archive-project .sec-archive-projects .project-card .project-content .wp-block-post-excerpt {
+    grid-column: 1 / -1; /* 全列にまたがる */
+    grid-row: 2; /* 2行目 */
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative; /* Grid配置のため */
+  }
+
+  /* project-contentからテキストをGridで配置するために、project-contentをGridに */
+  .tpl-archive-project .sec-archive-projects .project-card .project-content {
+    display: contents !important; /* Gridの子要素として直接配置 */
+  }
+
+  /* タイトルを2列目1行目に配置 */
+  .tpl-archive-project .sec-archive-projects .project-card .title {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    width: 100% !important;
+    font-size: clamp(16px, 2vw, 24px) !important; /* フォントサイズを小さくして1行表示に */
+    line-height: 1.2 !important; /* 行間を縮める */
+    min-height: 70px !important; /* 画像の高さ（70px）に合わせる */
+    height: 70px !important; /* 画像の高さ（70px）に合わせる */
+    white-space: nowrap !important; /* 1行表示 */
+    overflow: hidden !important; /* はみ出しを隠す */
+    text-overflow: ellipsis !important; /* 省略記号を表示 */
+    display: flex !important; /* flexboxで中央揃え */
+    align-items: center !important; /* 縦方向中央揃え */
+    justify-content: flex-start !important; /* 横方向左揃え */
+  }
+  
+  /* 2つ目のプロジェクトタイトルから「by TOKIMEKI」を非表示（スマホのみ） */
+  .tpl-archive-project .sec-archive-projects .project-card:nth-child(2) .title,
+  .tpl-archive-project .sec-archive-projects .project-card:nth-of-type(2) .title {
+    position: relative;
+  }
+  
+  .tpl-archive-project .sec-archive-projects .project-card:nth-child(2) .title::after,
+  .tpl-archive-project .sec-archive-projects .project-card:nth-of-type(2) .title::after {
+    content: '';
+    display: none;
+  }
+
+  /* テキストを全列2行目に配置 */
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .thumb figure,
+  .tpl-archive-project .sec-archive-projects .project-card .thumb .wp-block-post-featured-image,
+  .tpl-archive-project .sec-archive-projects .project-card .thumb .wp-block-post-featured-image figure {
+    width: auto !important; /* 幅を自動にして画像のサイズに合わせる */
+    height: 70px !important; /* 高さを70pxに固定 */
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important; /* 左揃え */
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    aspect-ratio: unset !important; /* aspect-ratioを無効化して画像の比率を保持 */
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .thumb img,
+  .tpl-archive-project .sec-archive-projects .project-card .thumb figure img,
+  .tpl-archive-project .sec-archive-projects .project-card .thumb .wp-block-post-featured-image img {
+    width: auto !important; /* 幅を自動にして画像の比率を保持 */
+    height: 70px !important; /* 高さを70pxに固定 */
+    max-width: none !important; /* 最大幅の制限を解除 */
+    max-height: 70px !important; /* 最大高さも70pxに */
+    min-width: auto !important;
+    min-height: 70px !important; /* 最小高さも70pxに */
+    object-fit: contain !important; /* containで画像の比率を保持 */
+    object-position: center !important; /* 中央に配置 */
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+  }
+
+  .tpl-archive-project .sec-archive-projects .project-card .subtitle,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt.subtitle p,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt__excerpt,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt,
+  .tpl-archive-project .sec-archive-projects .project-card .wp-block-post-excerpt * {
+    font-size: clamp(13px, 1.5vw, 16px) !important; /* フォントサイズを少し縮める */
+    line-height: 1.5 !important; /* 行間を縮める（1.8から1.5に） */
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
+  }
+  
   .tpl-archive-project .sec-archive-projects .header {
-    margin-left: var(--gutter);
+    margin-left: auto;
+    margin-right: auto;
     padding: var(--space-3) var(--space-4);
   }
 }

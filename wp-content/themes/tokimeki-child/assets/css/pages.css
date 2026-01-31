@@ -2,7 +2,7 @@
 .sec-hero {
   position: relative;
   padding-block: 0;
-  min-height: 80vh;
+  min-height: 50vh; /* デフォルト：スマホ用に小さく */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,11 +37,13 @@
 }
 
 .sec-hero .wp-block-cover {
-  min-height: 80vh;
+  min-height: 50vh; /* デフォルト：スマホ用に小さく */
   width: 100% !important;
   max-width: none !important;
   position: relative;
   margin: 0 !important;
+  padding-top: var(--space-4) !important; /* スマホ用のパディング */
+  padding-bottom: var(--space-4) !important; /* スマホ用のパディング */
 }
 
 /* ヒーローアニメーション */
@@ -92,39 +94,71 @@
 
 /* デバイスサイズごとにヘッダーの高さを固定し、ヒーローセクションをその下に配置 */
 /* インラインスタイルを上書きするため!importantを使用 */
-/* 400px以下: ヘッダー高さ80px */
+/* 400px以下: ヘッダー高さ80px（小さいスマホ） */
 @media (max-width: 400px) {
   .sec-hero,
   .sec-hero.wp-block-group {
     padding-top: var(--header-height-mobile) !important;
     padding-bottom: 0 !important;
+    min-height: calc(100vh - var(--header-height-mobile)) !important; /* 画面全体からヘッダー分を引く */
+    height: calc(100vh - var(--header-height-mobile)) !important;
+  }
+
+  .sec-hero .wp-block-cover {
+    min-height: calc(100vh - var(--header-height-mobile)) !important;
+    height: calc(100vh - var(--header-height-mobile)) !important;
+    padding-top: var(--space-3) !important;
+    padding-bottom: var(--space-3) !important;
   }
 }
 
-/* 401px - 640px: ヘッダー高さ85px */
+/* 401px - 640px: ヘッダー高さ85px（スマホ） */
 @media (min-width: 401px) and (max-width: 640px) {
   .sec-hero,
   .sec-hero.wp-block-group {
     padding-top: var(--header-height-small) !important;
     padding-bottom: 0 !important;
+    min-height: calc(100vh - var(--header-height-small)) !important; /* 画面全体からヘッダー分を引く */
+    height: calc(100vh - var(--header-height-small)) !important;
+  }
+
+  .sec-hero .wp-block-cover {
+    min-height: calc(100vh - var(--header-height-small)) !important;
+    height: calc(100vh - var(--header-height-small)) !important;
+    padding-top: var(--space-4) !important;
+    padding-bottom: var(--space-4) !important;
   }
 }
 
-/* 641px - 1024px: ヘッダー高さ95px */
+/* 641px - 1024px: ヘッダー高さ95px（タブレット） */
 @media (min-width: 641px) and (max-width: 1024px) {
   .sec-hero,
   .sec-hero.wp-block-group {
     padding-top: var(--header-height-medium) !important;
     padding-bottom: 0 !important;
+    min-height: 65vh !important; /* タブレット用の高さ */
+  }
+
+  .sec-hero .wp-block-cover {
+    min-height: 65vh !important;
+    padding-top: var(--space-6) !important;
+    padding-bottom: var(--space-6) !important;
   }
 }
 
-/* 1025px以上: ヘッダー高さ105px */
+/* 1025px以上: ヘッダー高さ105px（PC） */
 @media (min-width: 1025px) {
   .sec-hero,
   .sec-hero.wp-block-group {
     padding-top: var(--header-height-large) !important;
     padding-bottom: 0 !important;
+    min-height: 80vh !important; /* PC用の高さ */
+  }
+
+  .sec-hero .wp-block-cover {
+    min-height: 80vh !important;
+    padding-top: var(--wp--preset--spacing--20) !important;
+    padding-bottom: var(--wp--preset--spacing--120) !important;
   }
 }
 
@@ -164,7 +198,9 @@
 /* ===== MISSION ===== */
 .sec-mission {
   text-align: center;
-  padding-block: var(--space-9);
+  padding-block: calc(var(--space-9) * 1.5) !important;
+  padding-top: calc(var(--wp--preset--spacing--80) * 1.5) !important;
+  padding-bottom: calc(var(--wp--preset--spacing--80) * 1.5) !important;
   max-width: none !important;
   width: 100% !important;
   margin: 0 !important;
@@ -183,7 +219,26 @@
   line-height: 1.8;
   letter-spacing: 0.05em;
   margin: 0;
-  padding: 0 var(--gutter);
+  padding: 0;
+  max-width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* スマホサイズの時のみ改行を表示 */
+.sec-mission .mission-text .mobile-break {
+  display: block;
+}
+
+@media (min-width: 641px) {
+  .sec-mission .mission-text .mobile-break {
+    display: none;
+  }
+}
+
+/* 小さなフォントサイズのmission-textのマージン調整 */
+.sec-mission .mission-text-small {
+  margin-top: var(--space-4);
 }
 
 /* ===== TOP: Projects セクション ===== */
@@ -198,6 +253,9 @@
   padding-inline: 0;
   overflow: visible;
   border-radius: var(--r-marubi);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* WordPressのconstrainedレイアウトの影響を無効化 */
@@ -205,6 +263,13 @@
 .tpl-front .sec-top-projects.wp-block-group.is-layout-constrained {
   max-width: none !important;
   width: 100% !important;
+}
+
+/* constrainedレイアウト内のalignwide要素を中央揃え */
+.tpl-front .sec-top-projects.is-layout-constrained > .alignwide,
+.tpl-front .sec-top-projects.wp-block-group.is-layout-constrained > .alignwide {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* 背景ロゴ（Oの集合体）- 白背景の上に黒で塗りつぶし表示 */
@@ -236,7 +301,8 @@
   padding: var(--space-4) var(--space-5);
   border-radius: var(--r-marubi-inner);
   max-width: fit-content;
-  margin-left: var(--gutter);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tpl-front .sec-top-projects .header .h2 {
@@ -255,7 +321,16 @@
   position: relative;
   z-index: 2;
   max-width: 80%;
-  margin: 0 auto;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+}
+
+/* alignwideクラスが影響している場合の対策 */
+.tpl-front .sec-top-projects .wp-block-query.alignwide {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 80% !important;
 }
 
 /* post-template内のproject-cardをグリッドで制御 */
@@ -265,44 +340,22 @@
   gap: var(--space-3);
 }
 
-/* PC表示時：プロジェクトカードの高さを調整 */
-@media (min-width: 641px) {
-  .tpl-front .sec-top-projects .project-card {
-    min-height: 380px;
-  }
-
-  .tpl-front .sec-top-projects .project-card .thumb {
-    width: 608px;
-    height: 342px; /* 16:9の比率、5%縮小 */
-    overflow: visible;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .tpl-front .sec-top-projects .project-card .thumb img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    object-position: center;
-    border-radius: 0;
-  }
-
-  .tpl-front .sec-top-projects .project-card .title {
-    font-size: clamp(22px, 2.8vw, 32px);
-    font-weight: 700;
-    line-height: 1.4;
-    letter-spacing: 0.03em;
-  }
-
-  .tpl-front .sec-top-projects .project-card .subtitle,
-  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle,
-  .tpl-front .sec-top-projects .project-card .wp-block-post-excerpt.subtitle p {
-    font-size: clamp(18px, 2.2vw, 24px);
-  }
+/* リストアイテム（wp-block-post）内でproject-cardを中央寄せ */
+.tpl-front .sec-top-projects .wp-block-post-template > li.wp-block-post {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  width: 100%;
 }
+
+.tpl-front .sec-top-projects .wp-block-post-template > li.wp-block-post > .project-card,
+.tpl-front .sec-top-projects .wp-block-post-template > li.wp-block-post > .wp-block-group.project-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 
 @media (max-width: 640px) {
   .tpl-front .sec-top-projects {
@@ -315,7 +368,8 @@
 
   .tpl-front .sec-top-projects .header {
     margin-bottom: var(--space-6);
-    margin-left: var(--gutter);
+    margin-left: auto;
+    margin-right: auto;
     padding: var(--space-3) var(--space-4);
   }
 }
@@ -430,6 +484,9 @@
   margin: 0;
   padding-inline: 0;
   overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* WordPressのconstrainedレイアウトの影響を無効化 */
@@ -437,6 +494,13 @@
 .tpl-archive-project .sec-archive-projects.wp-block-group.is-layout-constrained {
   max-width: none !important;
   width: 100% !important;
+}
+
+/* constrainedレイアウト内のalignwide要素を中央揃え */
+.tpl-archive-project .sec-archive-projects.is-layout-constrained > .alignwide,
+.tpl-archive-project .sec-archive-projects.wp-block-group.is-layout-constrained > .alignwide {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* 背景ロゴ（Oの集合体）- 白背景の上に黒で塗りつぶし表示 */
@@ -468,7 +532,8 @@
   padding: var(--space-4) var(--space-5);
   border-radius: var(--r-marubi-inner);
   max-width: fit-content;
-  margin-left: var(--gutter);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tpl-archive-project .sec-archive-projects .header .h2,
@@ -484,7 +549,16 @@
   position: relative;
   z-index: 2;
   max-width: 80%;
-  margin: 0 auto;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+}
+
+/* alignwideクラスが影響している場合の対策 */
+.tpl-archive-project .wp-block-query.alignwide {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 80% !important;
 }
 
 /* post-template内のproject-cardをグリッドで制御 */
@@ -791,6 +865,7 @@
   opacity: 0.6;
   margin: 0;
   text-align: left;
+  font-size: clamp(1.05rem, 2.1vw, 1.4rem) !important; /* 70%に縮小 */
 }
 
 /* PC表示：カラム内のコンテンツを左揃え */
@@ -803,7 +878,21 @@
 .tpl-company .sec-company-mission .mission-content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: 0 !important; /* gapを無効化して個別のマージンで制御 */
+}
+
+/* 各段落のマージンを個別に設定 */
+.tpl-company .sec-company-mission .mission-content .mission-text:nth-child(1) {
+  margin-bottom: var(--space-5) !important;
+}
+
+.tpl-company .sec-company-mission .mission-content .mission-text:nth-child(2) {
+  margin-bottom: var(--space-2) !important;
+  margin-top: 0 !important;
+}
+
+.tpl-company .sec-company-mission .mission-content .mission-text:nth-child(3) {
+  margin-top: 0 !important;
 }
 
 /* is-layout-constrainedによる中央揃えを無効化 */
@@ -839,6 +928,21 @@
   text-align: left;
 }
 
+/* 2番目と3番目のmission-textのフォントサイズを小さくする（「代表取締役社長」と同じサイズ） */
+.tpl-company .sec-company-mission .mission-content .mission-text:nth-child(2),
+.tpl-company .sec-company-mission .mission-content .mission-text:nth-child(3) {
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem) !important;
+}
+
+/* 2番目と3番目のmission-textの間のマージンを狭くする */
+.tpl-company .sec-company-mission .mission-content .mission-text:nth-child(2) {
+  margin-bottom: var(--space-2) !important;
+}
+
+.tpl-company .sec-company-mission .mission-content .mission-text:nth-child(3) {
+  margin-top: 0 !important;
+}
+
 /* WordPressのconstrainedレイアウトの影響を無効化 */
 .tpl-company .sec-company-mission.is-layout-constrained,
 .tpl-company .sec-company-mission.wp-block-group.is-layout-constrained,
@@ -847,6 +951,70 @@
 .tpl-company .sec-company-message.is-layout-constrained,
 .tpl-company .sec-company-message.wp-block-group.is-layout-constrained {
   max-width: none !important;
+  width: 100% !important;
+}
+
+/* 3つのセクション（mission-content、company-profile-list、message-content）の左右を揃える */
+/* CEO PROFILEの右側に合わせて、MISSIONとCOMPANYの右側を揃える */
+.tpl-company .sec-company-mission .mission-content,
+.tpl-company .sec-company-mission .mission-content.is-layout-constrained,
+.tpl-company .sec-company-profile .company-profile-list,
+.tpl-company .sec-company-profile .company-profile-list.is-layout-constrained,
+.tpl-company .sec-company-message .message-content,
+.tpl-company .sec-company-message .message-content.is-layout-constrained {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* constrainedレイアウトの子要素（段落など）のmax-widthとmarginを無効化 */
+.tpl-company .sec-company-mission .mission-content.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+.tpl-company .sec-company-profile .company-profile-list.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+.tpl-company .sec-company-message .message-content.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+}
+
+/* 75%カラム内のコンテンツの左右を揃える */
+.tpl-company .wp-block-column[style*="flex-basis:75%"] > .wp-block-group {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* mission-textのパディングとマージンをリセット */
+.tpl-company .sec-company-mission .mission-text {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* profile-itemの左側のパディングをリセット */
+.tpl-company .sec-company-profile .profile-item {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* message-textのパディングとマージンをリセット */
+.tpl-company .sec-company-message .message-text {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
   width: 100% !important;
 }
 
@@ -870,6 +1038,7 @@
   opacity: 0.6;
   margin: 0;
   text-align: left;
+  font-size: clamp(1.05rem, 2.1vw, 1.4rem) !important; /* 70%に縮小 */
 }
 
 .tpl-company .company-profile-list {
@@ -931,12 +1100,21 @@
   opacity: 0.6;
   margin: 0;
   text-align: left;
+  font-size: clamp(1.05rem, 2.1vw, 1.4rem) !important; /* 70%に縮小 */
 }
 
 .tpl-company .message-content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: 0;
+  text-align: left !important;
+}
+
+/* is-layout-constrainedによる中央揃えを無効化 */
+.tpl-company .message-content.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
 }
 
 .tpl-company .message-text {
@@ -945,6 +1123,29 @@
   letter-spacing: 0.05em;
   margin: 0;
   color: var(--c-fg);
+  text-align: left !important;
+}
+
+.tpl-company .message-text.has-text-align-left {
+  text-align: left !important;
+}
+
+/* 「代表取締役社長」と「岡本啓太郎」の間のスペースを短くする */
+.tpl-company .message-content .message-text:first-child {
+  margin-bottom: 0 !important;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem) !important;
+  color: var(--c-muted) !important;
+  line-height: 1.4 !important;
+}
+
+.tpl-company .message-content .message-text:nth-child(2) {
+  margin-top: 0 !important;
+  margin-bottom: var(--space-5) !important;
+}
+
+.tpl-company .message-content .message-text:nth-child(3) {
+  margin-top: 0 !important;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem) !important;
 }
 
 .tpl-company .message-signature {
@@ -975,7 +1176,7 @@
   .tpl-company .sec-company-profile .section-label,
   .tpl-company .sec-company-message .section-label {
     text-align: center;
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-2) !important; /* スマホサイズでは小さく */
   }
 
   .tpl-company .sec-company-mission .mission-content {
@@ -988,12 +1189,17 @@
 
   .tpl-company .profile-item {
     flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-3) 0;
+    gap: var(--space-1);
+    padding: var(--space-2) 0;
   }
 
   .tpl-company .profile-label {
     min-width: auto;
+    margin-bottom: 0;
+  }
+
+  .tpl-company .profile-value {
+    margin-top: 0;
   }
 
   .tpl-company .message-signature {
@@ -1064,7 +1270,7 @@
   width: 170px;
   height: 170px;
   aspect-ratio: 1/1;
-  overflow: visible;
+  overflow: hidden; /* パディングを設けるためhiddenに変更 */
   border-radius: var(--r-marubi-inner);
   border: 1px solid var(--c-border);
   background: #fff;
@@ -1072,18 +1278,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: var(--space-2); /* 角丸枠と画像の間にパディング */
+  box-sizing: border-box; /* パディングを含めたサイズ計算 */
 }
 
-.tpl-archive-news .news-thumb img {
-  max-width: 90%;
-  max-height: 90%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
+.tpl-archive-news .news-thumb figure,
+.tpl-archive-news .news-thumb .wp-block-post-featured-image,
+.tpl-archive-news .news-thumb .wp-block-post-featured-image figure {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.tpl-archive-news .news-thumb img,
+.tpl-archive-news .news-thumb figure img,
+.tpl-archive-news .news-thumb .wp-block-post-featured-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
   border-radius: 0;
   transition: transform 0.5s ease;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .tpl-archive-news .news-item:hover .news-thumb img {
@@ -1197,7 +1423,8 @@
     width: 238px;
     height: 238px;
     aspect-ratio: 1/1;
-    padding: 10px;
+    padding: var(--space-2); /* 角丸枠と画像の間にパディング */
+    overflow: hidden; /* パディングを設けるためhiddenに変更 */
   }
 
   .tpl-archive-news .news-title {
@@ -1218,14 +1445,279 @@
   }
 
   .tpl-archive-news .news-thumb {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1/1;
+    width: 50% !important; /* スマホで画像サイズを半分に */
+    height: auto !important;
+    aspect-ratio: 1/1 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: var(--space-2) !important; /* 角丸枠と画像の間にパディング */
+    overflow: hidden !important; /* パディングを設けるためhiddenに変更 */
+    box-sizing: border-box !important;
+  }
+  
+  .tpl-archive-news .news-thumb figure,
+  .tpl-archive-news .news-thumb .wp-block-post-featured-image,
+  .tpl-archive-news .news-thumb .wp-block-post-featured-image figure {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+  
+  .tpl-archive-news .news-thumb img,
+  .tpl-archive-news .news-thumb figure img,
+  .tpl-archive-news .news-thumb .wp-block-post-featured-image img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
   }
 
   .tpl-archive-news .news-meta-group {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-2);
+  }
+}
+
+/* ===== ニュース詳細ページ ===== */
+.tpl-single-news .sec-single-news {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.tpl-single-news .sec-single-news .header {
+  margin-bottom: var(--space-8);
+}
+
+/* メタ情報 */
+.tpl-single-news .news-single-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.tpl-single-news .news-single-meta .news-date {
+  font-size: clamp(14px, 1.5vw, 16px);
+  color: var(--c-muted);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.tpl-single-news .news-single-meta .news-tag {
+  font-size: clamp(14px, 1.5vw, 16px);
+  color: var(--c-fg);
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.tpl-single-news .news-single-meta .news-tag a {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  color: var(--c-fg);
+  transition: all 0.2s ease;
+}
+
+.tpl-single-news .news-single-meta .news-tag a:hover {
+  background: var(--c-fg);
+  color: var(--c-bg);
+}
+
+/* コンテンツエリア */
+.tpl-single-news .news-single-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* タイトル */
+.tpl-single-news .news-single-title {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  margin: 0 0 var(--space-6) 0;
+  color: var(--c-fg);
+}
+
+/* 画像 */
+.tpl-single-news .news-single-image {
+  width: 50% !important;
+  max-width: 50% !important;
+  margin: 0 auto var(--space-6) auto !important;
+  aspect-ratio: 16/9 !important;
+  overflow: hidden !important;
+  border-radius: var(--r-marubi-inner) !important;
+  border: 1px solid var(--c-border) !important;
+  background: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: var(--space-2) !important;
+  box-sizing: border-box !important; /* パディングを含めたサイズ計算 */
+}
+
+.tpl-single-news .news-single-image figure,
+.tpl-single-news .news-single-image .wp-block-post-featured-image,
+.tpl-single-news .news-single-image .wp-block-post-featured-image figure {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.tpl-single-news .news-single-image img,
+.tpl-single-news .news-single-image figure img,
+.tpl-single-news .news-single-image .wp-block-post-featured-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  border-radius: 0 !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 本文コンテンツ */
+.tpl-single-news .news-single-content .wp-block-post-content {
+  font-size: clamp(16px, 1.8vw, 18px);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: var(--c-fg);
+}
+
+.tpl-single-news .news-single-content .wp-block-post-content p {
+  margin-bottom: var(--space-5);
+}
+
+.tpl-single-news .news-single-content .wp-block-post-content h2,
+.tpl-single-news .news-single-content .wp-block-post-content h3,
+.tpl-single-news .news-single-content .wp-block-post-content h4 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-4);
+  color: var(--c-fg);
+}
+
+.tpl-single-news .news-single-content .wp-block-post-content a {
+  color: var(--c-fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.tpl-single-news .news-single-content .wp-block-post-content a:hover {
+  opacity: 0.7;
+}
+
+/* レスポンシブ */
+@media (max-width: 1024px) {
+  .tpl-single-news .sec-single-news .wp-block-columns {
+    flex-direction: column;
+  }
+  
+  .tpl-single-news .sec-single-news .wp-block-column[style*="flex-basis:30%"] {
+    flex-basis: 100% !important;
+  }
+  
+  .tpl-single-news .sec-single-news .wp-block-column[style*="flex-basis:70%"] {
+    flex-basis: 100% !important;
+  }
+  
+  .tpl-single-news .news-single-meta {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  .tpl-single-news .sec-single-news {
+    padding-top: var(--space-7) !important;
+    padding-bottom: var(--space-7) !important;
+  }
+  
+  .tpl-single-news .sec-single-news .header {
+    margin-bottom: var(--space-6);
+  }
+  
+  .tpl-single-news .news-single-title {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    margin-bottom: var(--space-5);
+  }
+  
+  .tpl-single-news .news-single-image {
+    width: 50% !important;
+    max-width: 50% !important;
+    margin-bottom: var(--space-5) !important;
+    padding: var(--space-2) !important; /* 角丸枠と画像の間にパディング */
+    box-sizing: border-box !important;
+  }
+  
+  .tpl-single-news .news-single-image figure,
+  .tpl-single-news .news-single-image .wp-block-post-featured-image,
+  .tpl-single-news .news-single-image .wp-block-post-featured-image figure {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+  
+  .tpl-single-news .news-single-image img,
+  .tpl-single-news .news-single-image figure img,
+  .tpl-single-news .news-single-image .wp-block-post-featured-image img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  .tpl-single-news .news-single-content {
+    gap: var(--space-5);
+  }
+  
+  .tpl-single-news .news-single-content .wp-block-post-content {
+    font-size: clamp(15px, 2vw, 17px);
+  }
+  
+  .tpl-single-news .news-single-content .wp-block-post-content p {
+    margin-bottom: var(--space-4);
   }
 }

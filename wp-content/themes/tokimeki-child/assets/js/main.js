@@ -44,8 +44,8 @@
         entry.target.style.transform = 'translateX(0)';
         entry.target.classList.add('is-visible');
       } else {
-        // ビューポートから外れた時：右側に戻す（逆アニメーション）
-        const translateXValue = window.innerWidth <= 640 ? '400px' : '900px';
+        // ビューポートから外れた時：少し右に戻す（逆アニメーション）
+        const translateXValue = window.innerWidth <= 640 ? '50px' : '100px';
         entry.target.style.transform = `translateX(${translateXValue})`;
         entry.target.classList.remove('is-visible');
       }
@@ -65,8 +65,8 @@
   const projectCards = document.querySelectorAll('.tpl-front .sec-top-projects .project-card, .tpl-archive-project .sec-archive-projects .project-card');
   projectCards.forEach(card => {
     card.style.opacity = '1'; // 透明度は1のまま
-    // スマホサイズでは画面幅に応じた移動距離に調整
-    const translateXValue = window.innerWidth <= 640 ? '400px' : '900px';
+    // 初期位置：画面内の少し右側
+    const translateXValue = window.innerWidth <= 640 ? '50px' : '100px';
     card.style.transform = `translateX(${translateXValue})`;
     card.style.transition = 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // スムーズなイージング
     projectCardObserver.observe(card);
@@ -114,6 +114,131 @@
       });
     }
   });
+
+  // スマホ表示時のみ2つ目のプロジェクトタイトルを「銘灯-MEITOU-」に固定表示
+  function setSecondProjectTitle() {
+    try {
+      // アーカイブページとトップページの両方を対象にする
+      const selectors = [
+        '.tpl-archive-project .project-card',
+        '.tpl-front .sec-top-projects .project-card'
+      ];
+      
+      selectors.forEach(selector => {
+        const projectCards = document.querySelectorAll(selector);
+        if (!projectCards || projectCards.length < 2) {
+          return; // 要素が見つからない場合はスキップ
+        }
+        
+        const secondCard = projectCards[1]; // インデックス1が2つ目
+        if (!secondCard) {
+          return;
+        }
+        
+        const titleElement = secondCard.querySelector('.title');
+        if (!titleElement) {
+          return;
+        }
+        
+        // <a>タグを探す
+        const link = titleElement.querySelector('a');
+        const targetElement = link || titleElement;
+        
+        if (!targetElement) {
+          return;
+        }
+        
+        // 元のテキストを保存（初回のみ）
+        if (!targetElement.getAttribute('data-original-text')) {
+          const originalText = targetElement.textContent ? targetElement.textContent.trim() : '';
+          if (originalText) {
+            targetElement.setAttribute('data-original-text', originalText);
+          }
+        }
+        
+        if (window.innerWidth <= 640) {
+          // スマホ表示時は「銘灯-MEITOU-」に固定
+          if (targetElement.textContent !== '銘灯-MEITOU-') {
+            targetElement.textContent = '銘灯-MEITOU-';
+          }
+        } else {
+          // PC表示時は元のテキストを復元
+          const originalText = targetElement.getAttribute('data-original-text');
+          if (originalText && targetElement.textContent !== originalText) {
+            targetElement.textContent = originalText;
+          }
+        }
+      });
+    } catch (error) {
+      // エラーが発生した場合はコンソールに出力（開発時のみ）
+      if (console && console.error) {
+        console.error('Error in setSecondProjectTitle:', error);
+      }
+    }
+  }
+  
+  // 実行関数
+  function executeSetTitle() {
+    try {
+      setSecondProjectTitle();
+    } catch (error) {
+      // エラーが発生した場合はコンソールに出力（開発時のみ）
+      if (console && console.error) {
+        console.error('Error in executeSetTitle:', error);
+      }
+    }
+  }
+  
+  // ページ読み込み時とリサイズ時に実行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', executeSetTitle);
+  } else {
+    // DOMContentLoadedが既に完了している場合は即座に実行
+    setTimeout(executeSetTitle, 0);
+  }
+  
+  window.addEventListener('resize', function() {
+    // リサイズ時は少し遅延させて実行（パフォーマンス向上）
+    clearTimeout(window.resizeTimeout);
+    window.resizeTimeout = setTimeout(executeSetTitle, 100);
+  });
+  
+  // MutationObserverで動的に追加される要素にも対応
+  try {
+    // アーカイブページとトップページの両方を監視
+    const sections = [
+      document.querySelector('.tpl-archive-project .sec-archive-projects'),
+      document.querySelector('.tpl-front .sec-top-projects')
+    ];
+    
+    sections.forEach(section => {
+      if (section) {
+        const observer = new MutationObserver(function(mutations) {
+          try {
+            mutations.forEach(function(mutation) {
+              if (mutation.addedNodes.length) {
+                // 少し遅延させて実行（DOMが完全に構築されるのを待つ）
+                setTimeout(executeSetTitle, 50);
+              }
+            });
+          } catch (error) {
+            if (console && console.error) {
+              console.error('Error in MutationObserver:', error);
+            }
+          }
+        });
+        
+        observer.observe(section, {
+          childList: true,
+          subtree: true
+        });
+      }
+    });
+  } catch (error) {
+    if (console && console.error) {
+      console.error('Error setting up MutationObserver:', error);
+    }
+  }
 
   // プロジェクトアーカイブページの機能
   const projectItems = document.querySelectorAll('.tpl-archive-project .project-item');
